@@ -1,6 +1,6 @@
 {
   "name": "atlyn-resource-capacity",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Bounded read-only capacity exception analysis for Power BI",
   "license": "UNLICENSED",
@@ -15,21 +15,32 @@
     "audit:dependencies": "npm audit --omit=dev --audit-level=moderate",
     "audit:certification": "node scripts/audit-package.mjs",
     "audit:sdk": "pwsh -NoProfile -File scripts/package.ps1 -CertificationAudit",
-    "audit:all-dependencies": "npm audit --audit-level=moderate"
+    "audit:all-dependencies": "npm audit --audit-level=moderate",
+    "capture": "node scripts/capture.mjs",
+    "benchmark": "node scripts/benchmark.mjs",
+    "sample:bind": "node scripts/bind-samples.mjs",
+    "release:freeze": "node scripts/freeze-release.mjs",
+    "validate:local": "pwsh -NoProfile -File scripts/validate-local.ps1"
   },
   "dependencies": {
     "powerbi-visuals-utils-formattingmodel": "7.1.0",
     "powerbi-visuals-utils-formattingutils": "7.0.0"
   },
   "overrides": {
-    "webpack-dev-server": { "qs": "6.16.0" },
-    "sockjs": { "uuid": "11.1.1" }
+    "webpack-dev-server": {
+      "qs": "6.16.0"
+    },
+    "sockjs": {
+      "uuid": "11.1.1"
+    }
   },
   "devDependencies": {
     "@eslint/js": "9.39.1",
     "@playwright/test": "1.58.2",
     "@types/node": "24.10.1",
+    "ajv": "6.15.0",
     "eslint": "9.39.1",
+    "eslint-plugin-powerbi-visuals": "1.1.1",
     "fflate": "0.8.3",
     "jsdom": "27.2.0",
     "powerbi-visuals-api": "5.11.1",

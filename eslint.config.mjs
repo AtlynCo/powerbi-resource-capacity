@@ -1,13 +1,15 @@
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";
+import powerbi from "eslint-plugin-powerbi-visuals";
 
 export default tseslint.config(
   { ignores: ["dist/**", ".tmp/**", "node_modules/**", "test-results/**"] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  { ...powerbi.configs.recommended, files: ["src/**/*.ts"] },
   {
     files: ["**/*.mjs", "**/*.ts"],
-    languageOptions: { globals: { console: "readonly", process: "readonly", Buffer: "readonly" } },
+    languageOptions: { globals: { console: "readonly", process: "readonly", Buffer: "readonly", performance: "readonly" } },
     rules: { "@typescript-eslint/no-explicit-any": "error" }
   }
 );

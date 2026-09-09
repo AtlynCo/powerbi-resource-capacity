@@ -5,5 +5,5 @@ model Model
 
 	annotation PBI_QueryOrder = ["People","Machines"]
 
-	ref table People
-	ref table Machines
+ref table People
+ref table Machines

@@ -59,22 +59,22 @@ function chunk(type, data) {
   return Buffer.concat([length, name, data, checksum]);
 }
 
-const header = Buffer.alloc(13);
-header.writeUInt32BE(size, 0);
-header.writeUInt32BE(size, 4);
-header[8] = 8;
-header[9] = 6;
-const scanlines = Buffer.alloc(size * (size * 4 + 1));
-for (let y = 0; y < size; y++) {
-  pixels.copy(scanlines, y * (size * 4 + 1) + 1, y * size * 4, (y + 1) * size * 4);
-}
-const image = Buffer.concat([
-  Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]),
-  chunk("IHDR", header),
-  chunk("IDAT", deflateSync(scanlines, { level: 9 })),
-  chunk("IEND", Buffer.alloc(0))
-]);
 const assets = resolve(dirname(fileURLToPath(import.meta.url)), "..", "assets");
 mkdirSync(assets, { recursive: true });
-writeFileSync(resolve(assets, "icon.png"), image);
-console.log(`Generated original ${size}x${size} RGBA capacity icon (${image.length} bytes).`);
+for (const dimension of [20, 300]) {
+  const header = Buffer.alloc(13);
+  header.writeUInt32BE(dimension, 0);
+  header.writeUInt32BE(dimension, 4);
+  header[8] = 8; header[9] = 6;
+  const scanlines = Buffer.alloc(dimension * (dimension * 4 + 1));
+  for (let y = 0; y < dimension; y++) for (let x = 0; x < dimension; x++) {
+    const source = (Math.floor(y * size / dimension) * size + Math.floor(x * size / dimension)) * 4;
+    pixels.copy(scanlines, y * (dimension * 4 + 1) + 1 + x * 4, source, source + 4);
+  }
+  const image = Buffer.concat([
+    Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), chunk("IHDR", header),
+    chunk("IDAT", deflateSync(scanlines, { level: 9 })), chunk("IEND", Buffer.alloc(0))
+  ]);
+  writeFileSync(resolve(assets, dimension === 20 ? "icon.png" : "icon-300.png"), image);
+  console.log(`Generated original ${dimension}x${dimension} RGBA capacity icon (${image.length} bytes).`);
+}

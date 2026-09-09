@@ -1,33 +1,61 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
-  "name": "MachinesTable",
+  "name": "MachinesCapacityGrid",
   "position": { "x": 32, "y": 32, "z": 0, "width": 1216, "height": 640, "tabOrder": 0 },
   "visual": {
-    "visualType": "tableEx",
+    "visualType": "AtlynResourceCapacityC72F07AC931A4BD196369E890FA879E2",
     "query": {
       "queryState": {
-        "Values": {
+        "resource": {
           "projections": [
             {
               "field": { "Column": { "Expression": { "SourceRef": { "Entity": "Machines" } }, "Property": "Resource" } },
               "queryRef": "Machines.Resource"
-            },
+            }
+          ]
+        },
+        "period": {
+          "projections": [
             {
               "field": { "Column": { "Expression": { "SourceRef": { "Entity": "Machines" } }, "Property": "Period" } },
               "queryRef": "Machines.Period"
-            },
+            }
+          ]
+        },
+        "allocated": {
+          "projections": [
             {
               "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "Machines" } }, "Property": "Machine allocated hours" } },
               "queryRef": "Machines.Machine allocated hours"
-            },
+            }
+          ]
+        },
+        "capacity": {
+          "projections": [
             {
               "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "Machines" } }, "Property": "Machine available hours" } },
               "queryRef": "Machines.Machine available hours"
-            },
+            }
+          ]
+        },
+        "periodOrder": {
+          "projections": [
+            {
+              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "Machines" } }, "Property": "Machine period order" } },
+              "queryRef": "Machines.Machine period order"
+            }
+          ]
+        },
+        "nonworking": {
+          "projections": [
             {
               "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "Machines" } }, "Property": "Machine nonworking flag" } },
               "queryRef": "Machines.Machine nonworking flag"
-            },
+            }
+          ]
+        },
+        "tooltips": {
+          "projections": [
             {
               "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "Machines" } }, "Property": "Machine assignment count" } },
               "queryRef": "Machines.Machine assignment count"
@@ -42,22 +70,41 @@
       "sortDefinition": {
         "sort": [
           {
-            "field": { "Column": { "Expression": { "SourceRef": { "Entity": "Machines" } }, "Property": "Resource" } },
+            "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "Machines" } }, "Property": "Machine period order" } },
             "direction": "Ascending"
           },
           {
-            "field": { "Column": { "Expression": { "SourceRef": { "Entity": "Machines" } }, "Property": "Period" } },
+            "field": { "Column": { "Expression": { "SourceRef": { "Entity": "Machines" } }, "Property": "Resource" } },
             "direction": "Ascending"
           }
         ]
       }
+    },
+    "objects": {
+      "analysis": [
+        {
+          "properties": {
+            "unit": { "expr": { "Literal": { "Value": "'hours'" } } },
+            "additiveTotals": { "expr": { "Literal": { "Value": "true" } } }
+          }
+        }
+      ],
+      "layout": [
+        {
+          "properties": {
+            "cellWidth": { "expr": { "Literal": { "Value": "160D" } } },
+            "fontSize": { "expr": { "Literal": { "Value": "12D" } } },
+            "rtl": { "expr": { "Literal": { "Value": "false" } } }
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [
         {
           "properties": {
             "show": { "expr": { "Literal": { "Value": "true" } } },
-            "text": { "expr": { "Literal": { "Value": "'Machine-hours by day | native comparison: 15 source rows'" } } }
+            "text": { "expr": { "Literal": { "Value": "'Machines | daily hours: shutdown allocation and overloaded days'" } } }
           }
         }
       ]

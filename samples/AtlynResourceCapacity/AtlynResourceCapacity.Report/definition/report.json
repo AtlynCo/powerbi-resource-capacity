@@ -10,7 +10,20 @@
   "annotations": [
     {
       "name": "SampleSourceStatus",
-      "value": "Generated/unopened source. Native sample tables only. Import an approved .pbiviz and bind the custom visual in Desktop; see samples/README.md."
+      "value": "Fully bound PBIR source template. Run npm run sample:bind to embed the exact compiled package in dist/sample. Static validation is not Power BI Desktop validation; see docs/sample-binding.md."
+    }
+  ],
+  "resourcePackages": [
+    {
+      "name": "AtlynResourceCapacityC72F07AC931A4BD196369E890FA879E2",
+      "type": "CustomVisual",
+      "items": [
+        {
+          "name": "AtlynResourceCapacityC72F07AC931A4BD196369E890FA879E2.pbiviz.json",
+          "path": "AtlynResourceCapacityC72F07AC931A4BD196369E890FA879E2.pbiviz.json",
+          "type": "CustomVisualMetadata"
+        }
+      ]
     }
   ],
   "settings": {

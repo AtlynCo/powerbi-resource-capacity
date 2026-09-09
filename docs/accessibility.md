@@ -2,7 +2,7 @@
 
 These are the first-release interaction contract and manual acceptance targets. Automated browser tests do not replace testing the real Desktop and service hosts with assistive technology.
 
-The retained validation log records **9/9 compiled-package browser checks passing**; the coordinator confirmed execution in installed Edge Chromium using `CAPACITY_BROWSER_CHANNEL=msedge`. The optional stalled Chromium download was cancelled, not used as evidence. This is actual browser execution of the built package in the test harness, not Power BI Desktop/service integration or assistive-technology sign-off.
+The quality evidence is recorded against the exact package in the frozen release manifest and `local-evidence\browser.log`. Installed Edge uses `CAPACITY_BROWSER_CHANNEL=msedge`. This is actual browser execution of the compiled package in a mock-host harness, not Desktop/service integration or assistive-technology sign-off.
 
 ## Keyboard and selection
 
@@ -14,12 +14,17 @@ The retained validation log records **9/9 compiled-package browser checks passin
 | First/last cell in the grid | Ctrl+Home / Ctrl+End |
 | Move through visible rows | Page Up / Page Down |
 | Select the focused intersection | Enter / Space |
-| Multiselect | Ctrl, Command, or Shift with selection |
-| Clear selection | Escape |
+| Multiselect | Ctrl, Command, or Shift with selection, or the **+** toggle |
+| Visit next overload without changing filters | Alt+ArrowDown / **Next !** |
+| Close details/guide, then clear selection | Escape |
 | Open native context menu | Shift+F10 / Context Menu key |
 | Request the next bounded host segment | Focus **Load more**, then Enter / Space |
 
 Pointer selection and context menus use host identities for the resource-period intersection. Native tooltip support includes the primary values and optional tooltip measures. Power BI controls what context actions are available.
+
+Touch tap selects; the **+** toggle enables additive touch selection. A 550 ms stationary touch requests the native menu. Movement beyond 8 px, scrolling, pointer release/cancel, a data update, or destruction cancels the pending long-press. The trailing click on the same long-pressed cell is suppressed. Native menu availability still depends on the real Power BI host.
+
+**i** opens a full-value inspector for the focused cell, including source formatting, unformatted values, supplied nonworking/highlight metadata, and raw keys when formatted axis labels collide. **?** opens the guide. Panels scroll within the tile and Escape restores grid focus. No extra model grouping or data request is introduced by details.
 
 If `hostCapabilities.allowInteractions` is explicitly `false`, the visual displays an interactions-disabled notice and suppresses selection, clearing, context menus, and **Load more**. Disabled buttons cannot issue those host calls; keyboard navigation remains available. Test this read-only host-policy mode separately from a normal report's interaction settings.
 
@@ -46,6 +51,8 @@ English source strings provide fallback text when the host does not resolve a lo
 ## Scroll inside the tile
 
 The resource and period headers stay visible while the grid scrolls within the allocated visual area. A wide horizon or many resources must not expand the report canvas or hide report-level controls. Test a small tile and a large grid, not only a full-screen visual.
+
+Below 200 px wide or 140 px high the grid and toolbar are replaced by a keyboard-focusable, scrollable summary, not a clipped pretend matrix. It includes overload/unknown counts, partial/error information and an enlargement instruction. An 80×80 tile is a summary, not an actionable analysis grid. Compact layouts hide the footer and inline legend; the guide and cell details retain that information.
 
 ## Host filtering is not scheduling
 

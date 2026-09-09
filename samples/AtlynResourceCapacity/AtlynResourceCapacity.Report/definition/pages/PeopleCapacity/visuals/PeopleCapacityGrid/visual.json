@@ -1,33 +1,61 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
-  "name": "PeopleTable",
+  "name": "PeopleCapacityGrid",
   "position": { "x": 32, "y": 32, "z": 0, "width": 1216, "height": 640, "tabOrder": 0 },
   "visual": {
-    "visualType": "tableEx",
+    "visualType": "AtlynResourceCapacityC72F07AC931A4BD196369E890FA879E2",
     "query": {
       "queryState": {
-        "Values": {
+        "resource": {
           "projections": [
             {
               "field": { "Column": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Resource" } },
               "queryRef": "People.Resource"
-            },
+            }
+          ]
+        },
+        "period": {
+          "projections": [
             {
               "field": { "Column": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Period" } },
               "queryRef": "People.Period"
-            },
+            }
+          ]
+        },
+        "allocated": {
+          "projections": [
             {
               "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Allocated hours" } },
               "queryRef": "People.Allocated hours"
-            },
+            }
+          ]
+        },
+        "capacity": {
+          "projections": [
             {
               "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Available hours" } },
               "queryRef": "People.Available hours"
-            },
+            }
+          ]
+        },
+        "periodOrder": {
+          "projections": [
+            {
+              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Period order" } },
+              "queryRef": "People.Period order"
+            }
+          ]
+        },
+        "nonworking": {
+          "projections": [
             {
               "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Nonworking flag" } },
               "queryRef": "People.Nonworking flag"
-            },
+            }
+          ]
+        },
+        "tooltips": {
+          "projections": [
             {
               "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Assignment count" } },
               "queryRef": "People.Assignment count"
@@ -42,22 +70,41 @@
       "sortDefinition": {
         "sort": [
           {
-            "field": { "Column": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Resource" } },
+            "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Period order" } },
             "direction": "Ascending"
           },
           {
-            "field": { "Column": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Period" } },
+            "field": { "Column": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Resource" } },
             "direction": "Ascending"
           }
         ]
       }
+    },
+    "objects": {
+      "analysis": [
+        {
+          "properties": {
+            "unit": { "expr": { "Literal": { "Value": "'hours'" } } },
+            "additiveTotals": { "expr": { "Literal": { "Value": "true" } } }
+          }
+        }
+      ],
+      "layout": [
+        {
+          "properties": {
+            "cellWidth": { "expr": { "Literal": { "Value": "160D" } } },
+            "fontSize": { "expr": { "Literal": { "Value": "12D" } } },
+            "rtl": { "expr": { "Literal": { "Value": "false" } } }
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [
         {
           "properties": {
             "show": { "expr": { "Literal": { "Value": "true" } } },
-            "text": { "expr": { "Literal": { "Value": "'People-hours by week | native comparison: 12 source rows'" } } }
+            "text": { "expr": { "Literal": { "Value": "'People | weekly hours: overload, nonworking and missing capacity'" } } }
           }
         }
       ]

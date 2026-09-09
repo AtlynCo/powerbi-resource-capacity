@@ -1,11 +1,10 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { resolve, join } from "node:path";
 import { unzipSync, strFromU8 } from "fflate";
 
 export function readPackage() {
-  const packages = readdirSync("dist").filter(file => file.endsWith(".pbiviz"));
-  if (packages.length !== 1) throw new Error("Expected exactly one compiled .pbiviz in dist");
-  const path = resolve("dist", packages[0]);
+  const config = JSON.parse(readFileSync("pbiviz.json", "utf8"));
+  const path = resolve("dist", `${config.visual.guid}.${config.visual.version}.pbiviz`);
   const bytes = readFileSync(path);
   const entries = unzipSync(bytes);
   const manifest = JSON.parse(strFromU8(entries["package.json"]));

@@ -34,6 +34,7 @@ export interface Axis {
   key: string;
   label: string;
   order?: number;
+  rawLabel?: string;
 }
 export interface InputRow<T> {
   resource: Axis;
@@ -106,7 +107,8 @@ export function buildModel<T>(rows: InputRow<T>[], partial = false): CapacityMod
       if (previous.state !== "duplicate") duplicateCount++;
       // Ambiguous grains are never aggregated, even when the values match.
       cells.set(key, { ...previous, state: "duplicate", issue: "duplicate", allocated: null, capacity: null,
-        allocatedText: "?", capacityText: "?", utilization: null, overload: null, identity: undefined, tooltips: [] });
+        allocatedText: "?", capacityText: "?", utilization: null, overload: null, identity: undefined, tooltips: [],
+        nonworking: false, highlighted: false, highlightAllocated: undefined, highlightCapacity: undefined });
       continue;
     }
     cells.set(key, {
@@ -131,11 +133,20 @@ export function resourceTotal<T>(model: CapacityModel<T>, resource: string, addi
   if (!additive || model.partial || model.orderConflict || !model.periods.length) return undefined;
   let allocated = 0;
   let capacity = 0;
+  let allocationCorrection = 0;
+  let capacityCorrection = 0;
   for (const period of model.periods) {
     const cell = model.cells.get(cellKey(resource, period.key));
     if (!cell || cell.state === "invalid" || cell.state === "duplicate" || cell.allocated === null || cell.capacity === null) return undefined;
-    allocated += cell.allocated;
-    capacity += cell.capacity;
+    // Compensated sums retain small allocations alongside large, model-supplied amounts.
+    const allocationTerm = cell.allocated - allocationCorrection;
+    const allocationSum = allocated + allocationTerm;
+    allocationCorrection = (allocationSum - allocated) - allocationTerm;
+    allocated = allocationSum;
+    const capacityTerm = cell.capacity - capacityCorrection;
+    const capacitySum = capacity + capacityTerm;
+    capacityCorrection = (capacitySum - capacity) - capacityTerm;
+    capacity = capacitySum;
   }
   const total = account(allocated, capacity);
   return total.state === "invalid" ? undefined : total;
