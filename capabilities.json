@@ -1,0 +1,55 @@
+{
+  "dataRoles": [
+    { "name": "resource", "displayName": "Resource (stable key)", "displayNameKey": "RoleResource", "kind": "Grouping" },
+    { "name": "period", "displayName": "Period", "displayNameKey": "RolePeriod", "kind": "Grouping" },
+    { "name": "allocated", "displayName": "Allocated amount", "displayNameKey": "RoleAllocated", "kind": "Measure", "requiredTypes": [{ "numeric": true }] },
+    { "name": "capacity", "displayName": "Available capacity", "displayNameKey": "RoleCapacity", "kind": "Measure", "requiredTypes": [{ "numeric": true }] },
+    { "name": "periodOrder", "displayName": "Period order (optional)", "displayNameKey": "RoleOrder", "kind": "Measure", "requiredTypes": [{ "numeric": true }] },
+    { "name": "nonworking", "displayName": "Nonworking (0/1, optional)", "displayNameKey": "RoleNonworking", "kind": "Measure", "requiredTypes": [{ "numeric": true }] },
+    { "name": "tooltips", "displayName": "Tooltip measures", "displayNameKey": "RoleTooltips", "kind": "Measure" }
+  ],
+  "dataViewMappings": [{
+    "conditions": [{
+      "resource": { "min": 1, "max": 1 }, "period": { "min": 1, "max": 1 },
+      "allocated": { "min": 1, "max": 1 }, "capacity": { "min": 1, "max": 1 },
+      "periodOrder": { "max": 1 }, "nonworking": { "max": 1 }, "tooltips": { "max": 5 }
+    }],
+    "categorical": {
+      "categories": {
+        "select": [{ "for": { "in": "resource" } }, { "for": { "in": "period" } }],
+        "dataReductionAlgorithm": { "window": { "count": 1000 } }
+      },
+      "values": { "select": [
+        { "bind": { "to": "allocated" } }, { "bind": { "to": "capacity" } },
+        { "bind": { "to": "periodOrder" } }, { "bind": { "to": "nonworking" } },
+        { "for": { "in": "tooltips" } }
+      ] }
+    }
+  }],
+  "objects": {
+    "analysis": {
+      "displayName": "Analysis contract",
+      "displayNameKey": "Analysis",
+      "properties": {
+        "unit": { "displayName": "Compatible unit", "displayNameKey": "Unit", "type": { "text": true } },
+        "additiveTotals": { "displayName": "Measures additive across periods", "displayNameKey": "AdditiveTotals", "type": { "bool": true } }
+      }
+    },
+    "layout": {
+      "displayName": "Layout", "displayNameKey": "Layout",
+      "properties": {
+        "cellWidth": { "displayName": "Cell width", "displayNameKey": "CellWidth", "type": { "numeric": true } },
+        "fontSize": { "displayName": "Font size", "displayNameKey": "FontSize", "type": { "numeric": true } },
+        "rtl": { "displayName": "Right-to-left layout", "displayNameKey": "Rtl", "type": { "bool": true } }
+      }
+    }
+  },
+  "sorting": { "default": {} },
+  "supportsHighlight": true,
+  "supportsLandingPage": true,
+  "supportsEmptyDataView": true,
+  "supportsKeyboardFocus": true,
+  "supportsMultiVisualSelection": true,
+  "tooltips": { "supportedTypes": { "default": true }, "roles": ["tooltips"] },
+  "privileges": []
+}

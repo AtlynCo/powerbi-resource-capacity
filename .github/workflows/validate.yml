@@ -1,0 +1,30 @@
+name: Validate visual
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}\.tmp\browsers
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-fund
+      - run: npm run install:browser
+      - run: npm run package
+      - run: npm run audit:all-dependencies
+      - uses: actions/upload-artifact@v4
+        with:
+          name: atlyn-resource-capacity-review-package
+          path: |
+            dist/*.pbiviz
+            dist/*.sha256
+          if-no-files-found: error

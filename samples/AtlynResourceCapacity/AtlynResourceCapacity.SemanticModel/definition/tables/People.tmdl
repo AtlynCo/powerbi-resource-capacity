@@ -1,0 +1,99 @@
+table People
+
+	measure 'Allocated hours' = IF(COUNTROWS('People') = 1, SELECTEDVALUE('People'[Allocated]), BLANK())
+		formatString: #,0.0
+
+	measure 'Available hours' = IF(COUNTROWS('People') = 1, SELECTEDVALUE('People'[Capacity]), BLANK())
+		formatString: #,0.0
+
+	measure 'Period order' = SELECTEDVALUE('People'[PeriodOrder])
+		formatString: 0
+
+	measure 'Nonworking flag' = IF(COUNTROWS('People') = 1, SELECTEDVALUE('People'[Nonworking]), BLANK())
+		formatString: 0
+
+	measure 'Assignment count' = IF(COUNTROWS('People') = 1, SELECTEDVALUE('People'[Assignments]), BLANK())
+		formatString: #,0
+
+	measure 'Source rows' = COUNTROWS('People')
+		formatString: #,0
+
+	column Resource
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Resource
+
+	column Period
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		summarizeBy: none
+		sourceColumn: Period
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Allocated
+		dataType: double
+		isHidden
+		formatString: #,0.0
+		summarizeBy: none
+		sourceColumn: Allocated
+
+	column Capacity
+		dataType: double
+		isHidden
+		formatString: #,0.0
+		summarizeBy: none
+		sourceColumn: Capacity
+
+	column PeriodOrder
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: PeriodOrder
+
+	column Nonworking
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: Nonworking
+
+	column Assignments
+		dataType: int64
+		isHidden
+		formatString: #,0
+		summarizeBy: none
+		sourceColumn: Assignments
+
+	partition People = m
+		mode: import
+		source =
+				let
+					Source = #table(
+						type table [
+							Resource = text,
+							Period = date,
+							Allocated = number,
+							Capacity = nullable number,
+							PeriodOrder = Int64.Type,
+							Nonworking = Int64.Type,
+							Assignments = Int64.Type
+						],
+						{
+							{"P01 Planner A", #date(2026, 8, 3), 32, 40, 1, 0, 3},
+							{"P01 Planner A", #date(2026, 8, 10), 44, 40, 2, 0, 4},
+							{"P01 Planner A", #date(2026, 8, 17), 0, 0, 3, 1, 0},
+							{"P01 Planner A", #date(2026, 8, 24), 36, 40, 4, 0, 2},
+							{"P02 Planner B", #date(2026, 8, 3), 40, 40, 1, 0, 4},
+							{"P02 Planner B", #date(2026, 8, 10), 24, 32, 2, 0, 2},
+							{"P02 Planner B", #date(2026, 8, 17), 8, 0, 3, 1, 1},
+							{"P02 Planner B", #date(2026, 8, 24), 0, 40, 4, 0, 0},
+							{"P03 Analyst C", #date(2026, 8, 3), 28, 40, 1, 0, 3},
+							{"P03 Analyst C", #date(2026, 8, 10), 40, 40, 2, 0, 4},
+							{"P03 Analyst C", #date(2026, 8, 17), 32, 40, 3, 0, 3},
+							{"P03 Analyst C", #date(2026, 8, 24), 12, null, 4, 0, 1}
+						}
+					)
+				in
+					Source

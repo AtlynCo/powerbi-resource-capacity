@@ -1,0 +1,20 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/2.0.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY24SU06",
+      "reportVersionAtImport": "2.0.0",
+      "type": "SharedResources"
+    }
+  },
+  "annotations": [
+    {
+      "name": "SampleSourceStatus",
+      "value": "Generated/unopened source. Native sample tables only. Import an approved .pbiviz and bind the custom visual in Desktop; see samples/README.md."
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized"
+  }
+}

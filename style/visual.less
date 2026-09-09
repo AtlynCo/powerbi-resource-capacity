@@ -1,0 +1,87 @@
+/*!
+Microsoft powerbi-visuals-utils-formattingmodel 7.1.0, formattingutils 7.0.0,
+dataviewutils 7.0.0 and typeutils 7.0.0. Copyright (c) Microsoft Corporation.
+Bundled Globalize and culture data: Copyright Software Freedom Conservancy, Inc.
+Globalize is offered under MIT or GPL Version 2; this distribution uses MIT.
+MIT License
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+.atlyn-capacity {
+  --fg: #172c3b;
+  --bg: #fff;
+  --focus: #174db0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--fg);
+  font: var(--font-size, 12px)/1.4 "Segoe UI", sans-serif;
+  * { box-sizing: border-box; }
+  .toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; padding: 6px 8px; }
+  .toolbar strong { margin-inline-end: auto; font-size: 14px; }
+  button { color: var(--fg); background: var(--bg); border: 1px solid currentColor; border-radius: 3px; min-height: 28px; padding: 3px 8px; cursor: pointer; font: inherit; }
+  button[hidden] { display: none; }
+  button:disabled { cursor: wait; border-style: dashed; }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+  .caption { padding: 0 8px 4px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
+  .status { padding: 3px 8px; max-height: 68px; overflow: auto; flex-shrink: 0; border-block: 1px solid #c6d2da; }
+  .legend { padding: 5px 8px; font-size: 11px; }
+  .scroller { overflow: auto; position: relative; min-height: 0; flex: 1; overscroll-behavior: contain; scrollbar-gutter: stable; }
+  table { border-collapse: separate; border-spacing: 0; table-layout: fixed; width: max-content; }
+  th, td { width: var(--cell-width); min-width: var(--cell-width); max-width: var(--cell-width); padding: 7px 9px; border-inline-end: 1px solid #cad7df; border-block-end: 1px solid #cad7df; text-align: start; overflow-wrap: anywhere; }
+  th { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  thead th { position: sticky; top: 0; z-index: 3; background: #ecf2f6; height: 42px; vertical-align: top; }
+  th.resource, th.corner { position: sticky; inset-inline-start: 0; width: 160px; min-width: 160px; max-width: 160px; background: #f2f6f9; z-index: 2; }
+  th.corner { z-index: 4; }
+  .cell { height: 68px; cursor: pointer; position: relative; vertical-align: middle; }
+  .marker { display: inline-block; min-width: 18px; font-weight: 800; }
+  .amounts { display: inline-block; max-width: calc(100% - 18px); vertical-align: bottom; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ratio, .highlight-label { display: block; font-size: .9em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .state-available { background: #e3f2ec; }
+  .state-full { background: #fff0c0; }
+  .state-overload { background: #f9d6cf; }
+  .state-missing, .state-absent { background: #f2f4f6; border-block-end-style: dashed; }
+  .state-unavailable, .state-nonworking { background: #e3e9ef; }
+  .state-invalid, .state-duplicate { background: #ebdff5; border: 2px dashed #67448b; }
+  .selected { box-shadow: inset 0 0 0 3px var(--focus); }
+  .dimmed { background: var(--bg); border-style: dotted; }
+  .total { background: #f2f6f9; font-weight: 600; }
+  &.compact {
+    .toolbar { gap: 4px; padding: 3px 5px; flex-wrap: nowrap; }
+    .toolbar strong { display: none; }
+    .toolbar button { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .legend { display: none; }
+    .status { max-height: 40px; padding: 2px 5px; font-size: 11px; }
+    .caption { padding: 2px 5px; font-size: 11px; }
+    th.resource, th.corner { width: 100px; min-width: 100px; max-width: 100px; }
+  }
+  &.high-contrast {
+    th, td, .total, .status { background: var(--bg); color: var(--fg); border-color: var(--fg); }
+    .dimmed { opacity: 1; border-style: dotted; }
+    .selected { box-shadow: inset 0 0 0 3px var(--fg); }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .atlyn-capacity, .atlyn-capacity * { scroll-behavior: auto; transition: none; animation: none; }
+}
+@media (forced-colors: active) {
+  .atlyn-capacity { --fg: CanvasText; --bg: Canvas; --focus: Highlight; }
+  .atlyn-capacity th, .atlyn-capacity td { background: Canvas; color: CanvasText; border-color: CanvasText; }
+  .atlyn-capacity .dimmed { opacity: 1; }
+  .atlyn-capacity .selected { outline: 3px solid Highlight; outline-offset: -3px; }
+}
