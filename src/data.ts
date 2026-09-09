@@ -11,6 +11,7 @@ export interface DataResult {
   reduced: boolean;
   hasHighlights: boolean;
   additiveAllowed: boolean;
+  ambiguousLabels?: boolean;
   formatAllocated: (value: number) => string;
   formatCapacity: (value: number) => string;
 }
@@ -24,10 +25,10 @@ export function formatter(source: powerbi.DataViewMetadataColumn, locale: string
 
 function axis(value: powerbi.PrimitiveValue | undefined, label: string): Axis | undefined {
   if (value instanceof Date) {
-    return Number.isFinite(value.getTime()) ? { key: `date:${value.getTime()}`, label, order: value.getTime() } : undefined;
+    return Number.isFinite(value.getTime()) ? { key: `date:${value.getTime()}`, label, rawLabel: value.toISOString(), order: value.getTime() } : undefined;
   }
   if ((typeof value === "string" && value.trim() && value.length <= LIMITS.text) ||
-      (typeof value === "number" && Number.isFinite(value))) return { key: `${typeof value}:${value}`, label };
+      (typeof value === "number" && Number.isFinite(value))) return { key: `${typeof value}:${value}`, label, rawLabel: String(value) };
   return undefined;
 }
 
@@ -66,14 +67,14 @@ export function readData(view: powerbi.DataView | undefined, host: Host): DataRe
     const p = axis(period.values[i], "");
     if (!r || !p || (period.source.type?.dateTime && !(period.values[i] instanceof Date))) return { ...empty, error: "keys" };
     r.label = fr(resource.values[i]); p.label = fp(period.values[i]);
-    if (order) {
+    if (order && !(period.values[i] instanceof Date)) {
       const value = order.values[i];
       if (typeof value !== "number" || !Number.isFinite(value)) return { ...empty, error: "order" };
-      // Dates always retain chronological order; explicit order is for labels only.
-      if (!(period.values[i] instanceof Date)) p.order = value;
+      p.order = value;
     }
-    const identity = resource.identity?.[i] && period.identity?.[i]
+    const candidateIdentity = resource.identity?.[i] && period.identity?.[i]
       ? host.createSelectionIdBuilder().withCategory(resource, i).withCategory(period, i).createSelectionId() : undefined;
+    const identity = candidateIdentity?.hasIdentity() ? candidateIdentity : undefined;
     rows.push({
       resource: r, period: p, allocated: allocated.values[i], capacity: capacity.values[i], nonworking: nonworking?.values[i],
       allocatedText: fa(allocated.values[i]), capacityText: fc(capacity.values[i]), identity,
@@ -89,6 +90,7 @@ export function readData(view: powerbi.DataView | undefined, host: Host): DataRe
   if (count >= LIMITS.rows) model.bounded = true;
   return {
     model, segmented, reduced, hasHighlights,
+    ambiguousLabels: [model.resources, model.periods].some(axis => new Set(axis.map(item => item.label)).size < axis.length),
     additiveAllowed: !allocated.source.discourageAggregationAcrossGroups && !capacity.source.discourageAggregationAcrossGroups,
     formatAllocated: fa, formatCapacity: fc, error: model.orderConflict ? "order" : undefined
   };

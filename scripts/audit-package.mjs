@@ -6,7 +6,7 @@ import { readJson, readPackage } from "./package-lib.mjs";
 const { path, bytes, visual, manifest, entries } = readPackage();
 const config = readJson("pbiviz.json");
 assert.equal(manifest.visual.guid, config.visual.guid);
-assert.equal(manifest.visual.version, "1.0.0.0");
+assert.equal(manifest.visual.version, config.visual.version);
 assert.equal(visual.visual.guid, config.visual.guid);
 assert.deepEqual(visual.capabilities.privileges, []);
 assert.equal(visual.capabilities.supportsKeyboardFocus, true);
@@ -30,6 +30,9 @@ assert.deepEqual(visual.stringResources["fr-FR"], fr, "French resources must be 
 const png = readFileSync("assets\\icon.png");
 assert.equal(png.readUInt32BE(16), 20);
 assert.equal(png.readUInt32BE(20), 20);
+const largeIcon = readFileSync("assets\\icon-300.png");
+assert.equal(largeIcon.readUInt32BE(16), 300);
+assert.equal(largeIcon.readUInt32BE(20), 300);
 const hash = createHash("sha256").update(bytes).digest("hex");
 writeFileSync(`${path}.sha256`, `${hash}  ${path.split(/[\\/]/).pop()}\n`);
 console.log(JSON.stringify({ package: path, bytes: bytes.length, sha256: hash, certification: "Engineering audit only; not Microsoft certification" }, null, 2));

@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator('[role="grid"]')).toBeVisible();
 });
 
-test("compiled plugin renders authoritative amounts, exceptions and native interactions", async ({ page }) => {
+test("compiled plugin renders authoritative amounts, exceptions and mocked host interactions", async ({ page }) => {
   const first = page.locator(".cell").first();
   await expect(first).toHaveText("!45.0 / 40.0112.5%");
   await expect(page.locator(".cell").nth(1)).toHaveAttribute("aria-label", /Positive allocation against zero capacity/);
@@ -96,7 +96,7 @@ test("segmentation, host refusal, limits, missing unit and duplicate metadata ar
     view.categorical.values[2].values[1] = 0;
     window.capacityTest.updateView(view);
   });
-  await expect(page.locator(".state-duplicate")).toHaveCount(1);
+  await expect(page.locator(".cell.state-duplicate")).toHaveCount(1);
   await expect(page.locator(".status")).toContainText("1 duplicate");
 });
 
@@ -184,6 +184,6 @@ test("compiled package handles native date axes and packaged French localization
   }, packaged.stringResources["fr-FR"]);
   await expect(page.getByRole("button", { name: "Effacer la selection" })).toBeVisible();
   await expect(page.locator("thead th").nth(1)).toHaveText("2026-09-09");
-  await expect(page.locator(".state-overload").first()).toHaveAttribute("aria-label", /Surcharge/);
+  await expect(page.locator(".cell.state-overload").first()).toHaveAttribute("aria-label", /Surcharge/);
   expect(await page.evaluate(() => window.capacityTest.events.failures)).toEqual([]);
 });

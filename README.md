@@ -16,6 +16,8 @@ There is no claim of AppSource publication, completed Desktop/service acceptance
 - Provides a keyboard-navigable grid, high-contrast rendering, RTL layout, reduced-motion support, and sticky headers inside the visual tile.
 - Discloses incomplete host data and offers bounded, user-initiated **Load more**.
 - Shows setup guidance with no bound fields or an empty data view, and respects host-disabled interactions.
+- Summarizes delivered overload/unknown intersections; **Next !** visits exceptions without selecting or changing report filters.
+- Offers full cell details, including unformatted model values, and a touch multi-select toggle and long-press native context menu.
 
 It does **not** create assignments, optimize schedules, infer working calendars or holidays, calculate a critical path, edit the model, call a backend, or write data back. Your semantic model supplies the allocation and availability rules.
 
@@ -30,7 +32,7 @@ Use a trusted `.pbiviz` artifact built from this private repository. No public d
 5. Leave **Measures additive across periods** off unless you have verified the [totals contract](docs/data-contract.md#totals-are-an-explicit-assertion).
 6. Check all warnings before using the result. A loaded subset is not the complete planning horizon.
 
-For an offline walkthrough, see [samples](samples/README.md). The supplied `.pbip` is **generated source, not opened or saved by Desktop**. Its native sample tables are provided as a starting point; import and bind the custom visual yourself. No fake `.pbix` or purported product screenshots are included.
+For an offline walkthrough, see [samples](samples/README.md) and [sample binding](docs/sample-binding.md). `npm run sample:bind` produces the fully bound people/machine PBIP with the exact current package embedded. It is **generated source, not opened or saved by Desktop**. The comparison pages remain available. No fake `.pbix` is supplied; a real PBIX requires Desktop acceptance and saving.
 
 ## Field contract
 
@@ -94,17 +96,17 @@ An off RTL toggle does not force LTR in an automatically detected RTL locale. En
 
 ## Interactions and accessibility
 
-Select a cell to pass its resource-period identity to Power BI; use Ctrl/Command/Shift with selection for multiselect. Report authors control filtering and highlighting through **Edit interactions**. A selection does not modify an assignment.
+Select a cell to pass its resource-period identity to Power BI; use Ctrl/Command/Shift or the **+** toggle for multiselect. Touch long-press opens the native context menu; dragging cancels that request and scrolls normally. **Next !** / Alt+ArrowDown moves through overloaded cells without selecting. **i** shows full details and raw values; **?** opens the guide and legend. Report authors control filtering and highlighting through **Edit interactions**. A selection does not modify an assignment.
 
 When the host sets `hostCapabilities.allowInteractions` to `false`, a visible notice explains the disabled state. Selection, clearing, context-menu requests, and **Load more** are suppressed; this does not turn partial data into a complete result. Keyboard grid navigation remains available.
 
-Tab into the grid, navigate with arrow keys, select with Enter/Space, and clear with Escape. Home/End move across a row; Ctrl+Home/End move to grid extremes; Page Up/Down move through the tile. Shift+F10 opens the host context menu. Headers remain in the tile while its contents scroll. See [accessibility and host behavior](docs/accessibility.md) for the acceptance checklist and export limitations.
+Tab into the grid, navigate with arrow keys, select with Enter/Space, and clear with Escape (the first Escape closes an open details/guide panel). Home/End move across a row; Ctrl+Home/End move to grid extremes; Page Up/Down move through the tile. Shift+F10 opens the host context menu. Headers remain in the tile while its contents scroll. Below 200 px wide or 140 px high, an accessible, scrollable summary replaces an unusable grid and asks the reader to enlarge the tile; partial/error states remain disclosed. See [accessibility and host behavior](docs/accessibility.md).
 
 Atlyn Gantt and Calendar Slicer can be report companions through shared model keys and Power BI interactions. **Real Gantt interoperability is a manual release gate, not a verified integration claim.**
 
 ## Build and verify
 
-For maintainers: use Windows, Node.js 24 LTS (the local/CI baseline), npm, and PowerShell 7. Desktop is needed for real report acceptance, not for TypeScript tests.
+For maintainers: use Windows, Node.js 24 LTS, npm, and PowerShell 7. **All validation is local. GitHub Actions and other hosted CI/CD are prohibited for this repository.** No workflow or hosted status check is needed to build, review, or distribute source. Desktop is needed for real report acceptance, not for TypeScript tests.
 
 ```powershell
 npm ci
@@ -141,11 +143,20 @@ For only the compiled-package browser checks, replace `npm run package` with `np
 | `npm run audit:sdk` | Power BI SDK packaging with `--certification-audit` |
 | `npm run audit:certification` | Repository package inspection; distinct from the SDK audit |
 
-The recorded local code gates passed on **September 9, 2026**: **195 unit/host/sample tests**, **9/9 compiled-package Edge Chromium browser checks**, strict source/test type checking, lint, SDK certification audit, and static package audit. Both runtime and full npm dependency audits reported **zero vulnerabilities**. See the [engineering evidence snapshot](docs/submission-checklist.md#current-engineering-evidence) for retained logs and final-artifact checksum handling. The optional stalled Chromium download was cancelled; all browser evidence uses installed Edge. Edge exercised the compiled visual in a browser harness—**not inside Power BI Desktop or the service**. Passing local checks are **not** certification, legal approval, or completed manual publication acceptance.
+The quality candidate is **1.0.1.0**, using the original stable GUID. For an exact-byte release run, use the command below. It performs source gates, builds once using the SDK certification audit, then runs package browser checks, static/dependency audits, real-package captures at five tile sizes, a 30-sample benchmark with DevTools profiles, and bound-sample generation with official JSON Schema validation. Dependency audits and schema validation access public metadata; private source/model/package content is not uploaded. `dist\local-evidence\gates.json` records command exits and the exact package hash; a failed run does not produce a successful gate record.
+
+```powershell
+$env:CAPACITY_BROWSER_CHANNEL = 'msedge'
+npm run validate:local
+# After reviewed source is committed and the worktree is clean:
+npm run release:freeze
+```
+
+The freeze command refuses stale build inputs/evidence or an existing release directory. It archives source, package, checksum, icons, screenshots, raw performance samples, bound PBIP, and logs under `artifacts\release-<version>-<package hash>-<commit>\`, with a byte/hash inventory in `manifest.json`. These ignored files are intentionally not GitHub release assets. Copy the complete frozen directory to approved durable storage before removing a worktree. See [quality evidence](docs/quality-evidence.md) and the [submission dossier](docs/submission-dossier.md). Browser captures and benchmarks execute the compiled package with **mock host services, not inside Power BI Desktop or the service**.
 
 Build-only dependency overrides pin `webpack-dev-server`'s `qs` to `6.16.0` and `sockjs`'s `uuid` to `11.1.1`, retaining the current Power BI SDK while replacing vulnerable transitive versions. They are not runtime services or additions to the visual's API. The packaging workflow does not start or require the Power BI SDK development server. See [dependency review](docs/ownership-and-dependencies.md) for compatibility and audit gates.
 
-The original [capacity icon](assets/icon.svg) has a deterministic 20×20 PNG generator using only Node's built-in APIs. It does not use downloaded imagery.
+The original [capacity icon](assets/icon.svg) has a deterministic 20×20 package icon and 300×300 listing icon generator using only Node's built-in APIs. It does not use downloaded imagery.
 
 ## Documentation and samples
 

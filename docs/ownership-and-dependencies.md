@@ -25,6 +25,8 @@ See the actual [third-party notices](../THIRD-PARTY-NOTICES.txt) and installed p
 
 Build and test tooling is not an external runtime service. It still needs license review if redistributed. A production-only vulnerability audit does not review every development dependency and is not an inventory of all bundled code.
 
+The quality pass explicitly pins the existing official `eslint-plugin-powerbi-visuals` 1.1.1 for source lint and Ajv 6.15.0 for local sample-schema validation. Both are MIT-licensed development dependencies, not additions to the visual runtime or external visual services. Schema validation downloads public Microsoft schemas without uploading the sample.
+
 ## Build-only patched overrides
 
 The manifest pins two transitive dependencies used by development/build tooling:
@@ -44,7 +46,7 @@ Run `npm run audit:all-dependencies` to include development dependencies and `np
 
 **Recorded result, September 9, 2026:** both runtime and full npm dependency audits reported **zero vulnerabilities** after the focused overrides. These point-in-time dependency results do not establish license approval, Microsoft certification, or safety of future dependency updates. Archive the audit evidence with the exact release lockfile and rerun after changes.
 
-The retained validation and SDK-audit logs record a passing full package gate, SDK audit, static package audit, 195 unit/host/sample tests, and 9/9 compiled-package browser checks; see the [engineering evidence snapshot](submission-checklist.md#current-engineering-evidence). Installed Edge Chromium was the browser channel; the optional stalled Chromium download was cancelled. Edge harness results are not Desktop/service-host proof. Do not infer completed manual acceptance or notice/license approval from automated checks alone.
+The final local logs record passing source, SDK, package and sample-schema gates, **225 unit/host/sample tests**, and **55 compiled-package browser checks**; see the [engineering evidence snapshot](submission-checklist.md#current-engineering-evidence). Installed Edge Chromium was the browser channel. Edge harness results are not Desktop/service-host proof. Do not infer completed manual acceptance or notice/license approval from automated checks alone.
 
 ## Release audit gate
 

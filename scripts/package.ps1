@@ -34,6 +34,8 @@ try {
     if ($CertificationAudit) { $arguments += '--certification-audit' }
     & node @arguments
     if ($LASTEXITCODE -ne 0) { throw 'Power BI package build failed' }
+    & node scripts\stamp-build.mjs
+    if ($LASTEXITCODE -ne 0) { throw 'Build input fingerprint failed' }
 } finally {
     $env:USERPROFILE = $oldProfile
     $env:HOME = $oldHome
