@@ -1,0 +1,102 @@
+table Machines
+
+	measure 'Machine allocated hours' = IF(COUNTROWS('Machines') = 1, SELECTEDVALUE('Machines'[Allocated]), BLANK())
+		formatString: #,0.0
+
+	measure 'Machine available hours' = IF(COUNTROWS('Machines') = 1, SELECTEDVALUE('Machines'[Capacity]), BLANK())
+		formatString: #,0.0
+
+	measure 'Machine period order' = SELECTEDVALUE('Machines'[PeriodOrder])
+		formatString: 0
+
+	measure 'Machine nonworking flag' = IF(COUNTROWS('Machines') = 1, SELECTEDVALUE('Machines'[Nonworking]), BLANK())
+		formatString: 0
+
+	measure 'Machine assignment count' = IF(COUNTROWS('Machines') = 1, SELECTEDVALUE('Machines'[Assignments]), BLANK())
+		formatString: #,0
+
+	measure 'Machine source rows' = COUNTROWS('Machines')
+		formatString: #,0
+
+	column Resource
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Resource
+
+	column Period
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		summarizeBy: none
+		sourceColumn: Period
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Allocated
+		dataType: double
+		isHidden
+		formatString: #,0.0
+		summarizeBy: none
+		sourceColumn: Allocated
+
+	column Capacity
+		dataType: double
+		isHidden
+		formatString: #,0.0
+		summarizeBy: none
+		sourceColumn: Capacity
+
+	column PeriodOrder
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: PeriodOrder
+
+	column Nonworking
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: Nonworking
+
+	column Assignments
+		dataType: int64
+		isHidden
+		formatString: #,0
+		summarizeBy: none
+		sourceColumn: Assignments
+
+	partition Machines = m
+		mode: import
+		source =
+				let
+					Source = #table(
+						type table [
+							Resource = text,
+							Period = date,
+							Allocated = number,
+							Capacity = nullable number,
+							PeriodOrder = Int64.Type,
+							Nonworking = Int64.Type,
+							Assignments = Int64.Type
+						],
+						{
+							{"M01 Mill A", #date(2026, 8, 3), 16, 20, 1, 0, 2},
+							{"M01 Mill A", #date(2026, 8, 4), 24, 20, 2, 0, 3},
+							{"M01 Mill A", #date(2026, 8, 5), 0, 0, 3, 1, 0},
+							{"M01 Mill A", #date(2026, 8, 6), 4, 0, 4, 1, 1},
+							{"M01 Mill A", #date(2026, 8, 7), 10, 20, 5, 0, 1},
+							{"M02 Lathe B", #date(2026, 8, 3), 18, 20, 1, 0, 3},
+							{"M02 Lathe B", #date(2026, 8, 4), 20, 20, 2, 0, 3},
+							{"M02 Lathe B", #date(2026, 8, 5), 12, 16, 3, 0, 2},
+							{"M02 Lathe B", #date(2026, 8, 6), 0, 20, 4, 0, 0},
+							{"M02 Lathe B", #date(2026, 8, 7), 0, 0, 5, 0, 0},
+							{"M03 Press C", #date(2026, 8, 3), 8, 16, 1, 0, 1},
+							{"M03 Press C", #date(2026, 8, 4), 18, 16, 2, 0, 2},
+							{"M03 Press C", #date(2026, 8, 5), 6, 16, 3, 0, 1},
+							{"M03 Press C", #date(2026, 8, 6), 16, 16, 4, 0, 2},
+							{"M03 Press C", #date(2026, 8, 7), 8, 16, 5, 0, 1}
+						}
+					)
+				in
+					Source

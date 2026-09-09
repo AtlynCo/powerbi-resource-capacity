@@ -1,0 +1,22 @@
+{
+  "visual": {
+    "name": "atlynResourceCapacity",
+    "displayName": "Atlyn Resource Capacity",
+    "guid": "AtlynResourceCapacityC72F07AC931A4BD196369E890FA879E2",
+    "visualClassName": "Visual",
+    "version": "1.0.0.0",
+    "description": "Read-only resource-period capacity exception analysis with explicit units and partial-data disclosure.",
+    "supportUrl": "https://www.atlynco.com/docs/faq",
+    "gitHubUrl": "https://github.com/AtlynCo/powerbi-resource-capacity"
+  },
+  "apiVersion": "5.11.0",
+  "author": { "name": "Atlyn", "email": "atlyn.help@gmail.com" },
+  "assets": { "icon": "assets/icon.png" },
+  "style": "style/visual.less",
+  "capabilities": "capabilities.json",
+  "dependencies": null,
+  "stringResources": [
+    "stringResources/en-US/resources.resjson",
+    "stringResources/fr-FR/resources.resjson"
+  ]
+}

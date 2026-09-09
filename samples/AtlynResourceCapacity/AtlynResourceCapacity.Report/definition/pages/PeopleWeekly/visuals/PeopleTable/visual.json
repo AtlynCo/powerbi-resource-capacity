@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "PeopleTable",
+  "position": { "x": 32, "y": 32, "z": 0, "width": 1216, "height": 640, "tabOrder": 0 },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Resource" } },
+              "queryRef": "People.Resource"
+            },
+            {
+              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Period" } },
+              "queryRef": "People.Period"
+            },
+            {
+              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Allocated hours" } },
+              "queryRef": "People.Allocated hours"
+            },
+            {
+              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Available hours" } },
+              "queryRef": "People.Available hours"
+            },
+            {
+              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Nonworking flag" } },
+              "queryRef": "People.Nonworking flag"
+            },
+            {
+              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Assignment count" } },
+              "queryRef": "People.Assignment count"
+            },
+            {
+              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Source rows" } },
+              "queryRef": "People.Source rows"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": { "Column": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Resource" } },
+            "direction": "Ascending"
+          },
+          {
+            "field": { "Column": { "Expression": { "SourceRef": { "Entity": "People" } }, "Property": "Period" } },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": { "expr": { "Literal": { "Value": "true" } } },
+            "text": { "expr": { "Literal": { "Value": "'People-hours by week | generated source - import and bind the custom visual in Desktop'" } } }
+          }
+        }
+      ]
+    }
+  }
+}
