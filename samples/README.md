@@ -110,4 +110,13 @@ Complete the repository's `docs\submission-checklist.md` before sharing the samp
 - The literal partitions were inspected for external refresh sources.
 - The generated custom visual metadata, compiled JavaScript/CSS, icon, and localization resources are byte-identical to the selected package entries. `--verify` detects stale package hashes, changed output files, and missing or extra embedded resources.
 
-These are static source checks. They do **not** execute M or DAX, deserialize TMDL with the Desktop engine, open/save the report, render native visuals, or validate service refresh/export. Those remain manual acceptance work.
+These JSON/reference checks do **not** execute M or DAX, deserialize TMDL with the Desktop engine, open/save the report, render native visuals, or validate service refresh/export. Those remain manual acceptance work.
+
+The subsequent shared native preflight found indented `ref table` declarations
+in Capacity's original `model.tmdl`. They are now top-level; official Microsoft
+TOM 19.117.0 deserializes the corrected model. The PBIR `version.json` was already
+present. Explicit validator/regression guards now cover both risks. The separate
+`scripts\validate-sample-tom.ps1` is parser preflight, **not** Desktop render,
+refresh, save or reopen proof. See `docs\sample-binding.md`. The sealed quality
+bundle remains unchanged; the corrected sample is supplied only as a distinct
+provisional retry with the identical rendering package.

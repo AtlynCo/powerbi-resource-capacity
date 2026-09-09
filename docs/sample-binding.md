@@ -132,6 +132,40 @@ node scripts\bind-samples.mjs --validate-schemas
 node scripts\bind-samples.mjs --verify
 ```
 
+### Official TOM preflight and the provisional retry
+
+The shared Desktop preflight exposed a gap that JSON Schema validation cannot
+detect: `ref table` declarations in `model.tmdl` must be top-level, not indented
+under `model Model`. Capacity had this defect. Official Microsoft TOM
+19.117.0 reproduced `InvalidLineType / ReferenceObject` on the original model
+and deserialized both corrected tables after removing the indentation.
+Capacity already had PBIR `definition\version.json` with version `2.0.0`;
+the validator now explicitly requires it and both top-level table references.
+Regression tests reject missing/invalid version metadata and indented/missing
+table references.
+
+Use an existing official TOM installation, retaining its sibling DLLs:
+
+```powershell
+pwsh -NoProfile -File scripts\validate-sample-tom.ps1 `
+  -TomAssembly 'C:\path\to\Microsoft.AnalysisServices.Tabular.dll'
+```
+
+The command does not install tools, connect to a server, execute M/DAX or operate
+Desktop. `-Definition` can point to the generated sample's semantic-model
+`definition` directory. `CAPACITY_TOM_ASSEMBLY` can supply the assembly path.
+It checks both tables, their seven columns/six measures and single M partitions,
+and records the assembly version/hash and PowerShell/.NET versions. Missing TOM
+or deserialization/shape errors fail rather than imply native compatibility.
+
+The sealed rendering-evidence bundle at source `fb6631b8c540` is **unchanged**.
+The corrected sample is a **distinct provisional native-preflight retry**, using
+the same `1.0.1.0` package SHA-256
+`0f927e88f501a9351f4f5249dd93186bd768ba36fee8f188147e5fd9ec8e55c0`.
+It is not a rebuilt visual, final paid build, certification submission or
+replacement of sealed evidence. Parent owns Desktop preflight on an editable
+copy; paid/native/certification holds otherwise remain in force.
+
 `--validate-schemas` is the **optional online** validation step. It downloads only
 public, versioned Microsoft JSON schemas, validates every project/report JSON
 document using the existing Ajv dependency, and records schema URL/hash pairs.

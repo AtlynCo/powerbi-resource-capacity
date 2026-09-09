@@ -11,6 +11,12 @@ const source = resolve("samples", "AtlynResourceCapacity");
 const scratch = resolve("dist", "sample-binding-tests", randomUUID());
 const resourceFile = `resources/${config.visual.guid}.pbiviz.json`;
 const gridPath = join("AtlynResourceCapacity.Report", "definition", "pages", "PeopleCapacity", "visuals", "PeopleCapacityGrid", "visual.json");
+function copySource(name: string): string {
+  const parent = join(scratch, name), copiedRoot = join(parent, "AtlynResourceCapacity");
+  cpSync(source, copiedRoot, { recursive: true });
+  for (const csv of ["people-hours-by-week.csv", "machine-hours-by-day.csv"]) cpSync(join("samples", csv), join(parent, csv));
+  return copiedRoot;
+}
 
 // A labeled test fixture, never a release package or the default generated sample.
 function fixture() {
@@ -139,15 +145,28 @@ describe("fully bound offline PBIP sample", () => {
   });
 
   it("rejects unresolved fields and incompatible units in copied templates", () => {
-    const copiedRoot = join(scratch, "source-copy", "AtlynResourceCapacity");
-    cpSync(source, copiedRoot, { recursive: true });
-    for (const name of ["people-hours-by-week.csv", "machine-hours-by-day.csv"]) {
-      cpSync(join("samples", name), join(scratch, "source-copy", name));
-    }
+    const copiedRoot = copySource("source-copy");
     const visualPath = join(copiedRoot, gridPath), original = readFileSync(visualPath, "utf8");
     writeFileSync(visualPath, original.replace('"Property": "Allocated hours"', '"Property": "Missing measure"'));
     expect(() => binding.validateSource(copiedRoot)).toThrow(/unresolved Measure/);
     writeFileSync(visualPath, original.replace("'hours'", "'percent'"));
     expect(() => binding.validateSource(copiedRoot)).toThrow();
+  });
+  it("rejects missing or incompatible PBIR version metadata before generation", () => {
+    const copiedRoot = copySource("version-risk");
+    const version = join(copiedRoot, "AtlynResourceCapacity.Report", "definition", "version.json");
+    rmSync(version);
+    expect(() => binding.validateSource(copiedRoot)).toThrow(/version.json is required/);
+    writeFileSync(version, JSON.stringify({ version: "invented" }));
+    expect(() => binding.validateSource(copiedRoot)).toThrow(/Unsupported PBIR definition version/);
+  });
+  it("rejects indented or missing top-level TMDL table references", () => {
+    const copiedRoot = copySource("reference-risk");
+    const model = join(copiedRoot, "AtlynResourceCapacity.SemanticModel", "definition", "model.tmdl");
+    const original = readFileSync(model, "utf8");
+    writeFileSync(model, original.replace(/^ref table /gm, "\tref table "));
+    expect(() => binding.validateSource(copiedRoot)).toThrow(/must be top-level/);
+    writeFileSync(model, original.replace(/^ref table Machines\r?$/m, ""));
+    expect(() => binding.validateSource(copiedRoot)).toThrow(/both top-level table references/);
   });
 });

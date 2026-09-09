@@ -73,7 +73,14 @@ export function validateSource(root = sourceRoot, capabilities = json("capabilit
   const reference = json(join(reportRoot, "definition.pbir")).datasetReference;
   assert.deepEqual(reference, { byPath: { path: `../${modelName}` } }, "Sample must reference the offline local model");
   assert.ok(existsSync(join(root, modelName, "definition.pbism")));
+  const modelDefinition = readFileSync(join(root, modelName, "definition", "model.tmdl"), "utf8");
+  assert.doesNotMatch(modelDefinition, /^[ \t]+ref table\b/m, "TMDL table references must be top-level, not indented model properties");
+  assert.deepEqual([...modelDefinition.matchAll(/^ref table (\w+)\r?$/gm)].map(match => match[1]),
+    scenarios.map(scenario => scenario.table), "TMDL must declare both top-level table references");
   const definitions = join(reportRoot, "definition");
+  const versionPath = join(definitions, "version.json");
+  assert.ok(existsSync(versionPath), "PBIR definition/version.json is required for Desktop");
+  assert.equal(json(versionPath).version, "2.0.0", "Unsupported PBIR definition version");
   const report = json(join(definitions, "report.json"));
   assert.ok(!report.publicCustomVisuals?.length && !report.organizationCustomVisuals?.length,
     "Sample must use a private embedded visual, not a store download");

@@ -87,3 +87,15 @@ Detailed mock call/identity-history instrumentation is disabled during measureme
 The frozen `performance\benchmark.json` is authoritative for the final candidate's measured distribution, rather than a stale number copied from an intermediate build. `local-evidence\gates.json` records the command outcomes for those same package bytes. `build-inputs.json` fingerprints runtime, build, browser-test and sample inputs; `release:freeze` refuses a stale fingerprint.
 
 Memory is structurally bounded by 200 resources, 104 periods, 10,000 Cartesian cells/source records, 512-character texts/keys and five tooltip fields. The benchmark's short-label heap is **not** a guarantee of identical heap for maximum-length tooltips or the host's own retained data. The package remains under the 4 MiB static budget. Actual native-host scalability and exports remain manual acceptance work.
+
+## Subsequent sample-only preflight correction
+
+The later shared Desktop preflight identified an indented TMDL table-reference
+defect in Capacity's sample. The original model reproduced the official TOM
+`InvalidLineType / ReferenceObject` error; root-level references correct it.
+PBIR `definition\version.json` was already present. Sample validators now guard
+both risks, with a separate installed-official-TOM deserialization command.
+This does not change the historical gate results or sealed files above.
+A distinct provisional sample retry uses the identical package bytes; it is
+not native render proof or a final paid/submission build. See
+[sample preflight](sample-binding.md#official-tom-preflight-and-the-provisional-retry).
