@@ -1,6 +1,21 @@
 # Atlyn Resource Capacity submission dossier
 
-**Prepared for owner review, not submitted.** Candidate 1.0.1.0 is certification-oriented, not Microsoft certified. The parent coordinates native Power BI and Partner Center; this session does not manipulate those shared UIs or invent commercial approvals.
+**Prepared for owner review, not submitted.** Current native retry 1.0.2.0 fixes cross-realm Date handling; the sealed full-quality baseline remains 1.0.1.0. Neither is Microsoft certified. The parent coordinates native Power BI and Partner Center; this session does not manipulate those shared UIs or invent commercial approvals.
+
+## Approved acquisition and runtime model
+
+The owner approved **storefront subscriptions, ungated visuals** on 2026-09-10.
+Acquisition uses existing Atlyn subscriptions outside Power BI. Runtime is
+ungated, with free shared viewing and no viewer activation or subscription
+check. Do not describe this as paid-author enforcement.
+
+No license keys, new signer, AAD flow, entitlement API, feature gates, WebAccess
+or external runtime license calls are to be added. The current offline renderer
+is the intended runtime; runtime licensing integration is **not a blocker**.
+No repackaging or version bump is needed for this documentation-only decision.
+Frozen folders remain historical evidence and must not be rewritten.
+The subsequent 1.0.2.0 version bump is solely for the native date-key correction,
+not licensing or a badge. See [separate retry evidence](quality-evidence.md#native-date-key-correction-1020).
 
 ## Proposed listing copy
 
@@ -14,30 +29,52 @@ Use people-hours by week, machine-hours by day, or another explicitly compatible
 
 The visual is read-only. It does not schedule tasks, infer holidays, spread daily workloads, level resources, calculate critical paths, change assignments or write data back. FTE, rates and snapshots usually require totals to stay off. Large analyses are bounded to 200 resources, 104 periods and 10,000 cells/records; exports may reflect only the visible tile.
 
+Acquire the visual through existing Atlyn storefront subscriptions. The visual
+runs without license checks or feature gates, and recipients can view shared
+reports for free without an Atlyn viewer subscription. Power BI licensing,
+report access and tenant policies still apply.
+
 **Suggested search terms for owner review:** resource capacity, allocation, utilization, overload, capacity exceptions.
 
-Do not add “certified”, “best”, “market-leading”, automatic scheduling, validated Gantt integration, guaranteed export completeness, or free-use/pricing claims unless independently approved and substantiated.
+Do not add “certified”, “best”, “market-leading”, automatic scheduling, validated Gantt integration, guaranteed export completeness or broader free-use/pricing claims beyond the approved acquisition and free shared viewing model.
 
 ## Package identity and source
 
 | Field | Value |
 |---|---|
 | GUID | `AtlynResourceCapacityC72F07AC931A4BD196369E890FA879E2` |
-| Visual version | `1.0.1.0` |
+| Visual version | `1.0.2.0` provisional native retry; historical baseline `1.0.1.0` |
 | API declaration | `5.11.0` |
 | SDK API package / tools | `5.11.1` / `7.2.1` |
 | Runtime permissions | `privileges: []` |
 | Runtime | Local bundled rendering; no external requests, telemetry, assets, backend, auth or payment service |
-| Source license status | Proprietary / `UNLICENSED`; not an approved end-user license |
+| Acquisition / runtime access | Existing Atlyn storefront subscriptions; ungated runtime and free shared viewing |
+| Source license status | No tracked first-party LICENSE/COPYING; package declares `UNLICENSED`; no relicensing |
 | Support metadata | `https://www.atlynco.com/docs/faq`; `atlyn.help@gmail.com`; author Atlyn |
 | Repository | Private `AtlynCo/powerbi-resource-capacity` |
-| Exact source/package/assets | Frozen `manifest.json`: commit, tools, files, bytes and SHA-256 |
+| Exact source/package/assets | Retry manifest for 1.0.2.0; sealed `manifest.json` for historical 1.0.1.0. Do not mix their bytes or evidence. |
 
-The quality PR is reviewed before merge. The final lowercase `certification` branch must be coordinated with the parent and point at final reviewed source. Reviewer access to the private repository and ownership of that branch are not silently assumed.
+The earlier quality PR has merged; subsequent changes remain subject to the
+parent's final gate. Do not move main or the lowercase `certification` ref, merge
+another PR or submit an offer without that gate. Reviewer access to the private
+repository is not silently assumed.
 
 ## Proposed assets
 
-The original icon is supplied at 20x20 (`icon.png`) and 300x300 (`icon-300.png`). Three unaltered 1366x768 package captures are generated under `screenshots\listing`: people-hours overview, people cell details, and machine-hours overview. Each has exact bytes/hash and a provenance statement in `capture.json`.
+The original icon is supplied at 20x20 (`icon.png`) and 300x300 (`icon-300.png`). The historical 1.0.1.0 bundle has three unaltered 1366x768 package captures under `screenshots\listing`: people-hours overview, people cell details, and machine-hours overview. Each has exact bytes/hash and a provenance statement in `capture.json`. They are not relabeled as 1.0.2.0 assets; the retry's foreign-Date screenshots are separate diagnostic evidence.
+
+**The owner requests Microsoft's official "Power BI certified" badge.** This
+means selecting **Request Power BI certification** in Partner Center's Product
+setup during the parent-authorized submission, followed by Microsoft's review
+and grant. It is not the IAP "additional purchase" label. No badge asset or
+placement is pending from the parent; do not add an in-visual badge, claim
+certification before Microsoft grants it, or change runtime/frozen assets.
+See [Microsoft's certification request and badge guidance](https://learn.microsoft.com/en-us/power-bi/developer/visuals/power-bi-custom-visuals-certified#submit-a-power-bi-visual-for-certification).
+
+**Recorded status:** preparation only; no certification request receipt or
+Microsoft grant is recorded. Submission remains behind the parent's final gate,
+and native results are still forthcoming. Selecting the checkbox does not
+establish certification or native-host acceptance.
 
 These are **actual final-package renders with sanitized data in a local mock-host browser**, not fabricated drawings or Desktop screenshots. Parent/owner must approve their listing suitability; replace them with authentic native-host captures if submission review requires native report context. The other five-size engineering captures are not all listing-size assets.
 
@@ -56,7 +93,12 @@ Read [current Microsoft requirements and comparison](submission-research.md), [l
 | Interaction/accessibility | Actual compiled-package tests with mocked host; keyboard/touch/HC/RTL/resize/scroll/lifecycle | Desktop/service, assistive technology, linguistic and real interaction acceptance |
 | Sample/report/export | Bound offline PBIP and exact embedded package | Refresh/save/reopen, genuine PBIX, service and export observations |
 | Source/review | Private quality PR and immutable source archive | Review/merge decision, final certification branch and reviewer permissions |
-| Commercial/legal | Existing metadata and explicit unresolved decisions | Price/license/EULA/privacy/support/publisher/artwork/dependency approvals |
-| Publication | Listing copy/assets and evidence dossier | Parent/authorized publisher performs Partner Center validation/submission |
+| Commercial/legal | Approved storefront subscriptions, ungated runtime and free shared viewing; first-party terms preserved | Existing checkout/distribution terms, EULA/privacy/support/publisher/artwork/dependency review; no runtime licensing work |
+| Publication | Listing copy/assets and evidence dossier | Final assets and parent gate; parent requests Power BI certification through Partner Center, records submission and Microsoft's review decision; no badge asset/placement task |
 
-No approval, service test, export coverage or submission receipt is synthesized. Legal terms, commercial price, license model, support commitments, geographic availability and privacy policy are owner decisions. The repository's technical absence of runtime network calls is not a substitute for an approved privacy statement.
+The acquisition/runtime approval above is an actual owner decision, not a claim
+of broader legal or publication approval. No service test, export coverage or
+submission receipt is synthesized. Final assets, native PBIX/host acceptance,
+existing commercial terms, support commitments, geographic availability, privacy
+policy and publication remain parent/owner responsibilities. The absence of
+runtime network calls is not a substitute for an approved privacy statement.

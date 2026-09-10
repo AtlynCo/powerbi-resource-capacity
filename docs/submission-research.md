@@ -1,6 +1,8 @@
 # Submission requirements and internal comparison
 
-Public sources checked **2026-09-09**. This is research, not certification, legal approval, native-host evidence or a competitive benchmark. Candidate identity is version **1.0.1.0**, npm **1.0.1**, unchanged GUID.
+Public sources checked **2026-09-09**. This is research, not certification, legal approval, native-host evidence or a competitive benchmark. The researched baseline is version **1.0.1.0**, npm **1.0.1**; the later native Date correction uses **1.0.2.0** / **1.0.2**, with unchanged GUID. See [retry evidence](quality-evidence.md#native-date-key-correction-1020).
+
+Microsoft's certification request and badge guidance was rechecked **2026-09-10** for the owner's clarification below; this does not constitute a submission or approval.
 
 ## Microsoft requirements
 
@@ -19,6 +21,7 @@ Public sources checked **2026-09-09**. This is research, not certification, lega
 | Data robustness | Empty/string/negative data, at least 20,000 input rows and 16-digit numbers; testing guidance also lists null, infinity, wrong types, dates/formats, one/two rows and thousands of rows. [Policy 1180.2](https://learn.microsoft.com/en-us/legal/marketplace/certification-policies#11802-functionality), [tests](https://learn.microsoft.com/en-us/power-bi/developer/visuals/submission-testing#general-test-cases) | Test 20,000 supplied records with visible bounded/partial handling. This does not require pretending all 20,000 cells are rendered. |
 | Performance | Acceptable responsiveness without freezing; use developer tools, not visual impressions or console timing alone. No universal millisecond threshold is published here. [Performance testing](https://learn.microsoft.com/en-us/power-bi/developer/visuals/submission-testing#performance-testing) | Repeated timings, machine/data counts and separate CDP CPU/timeline profiles. Parent still profiles native hosts. |
 | Certification source | Optional certification requires review-accessible one-visual source and branch named exactly lowercase `certification`, matching submitted package. Freeze until next submission; private source is allowed with reviewer access. [Repository requirements](https://learn.microsoft.com/en-us/power-bi/developer/visuals/power-bi-custom-visuals-certified#code-repository-requirements) | Final source archive and fingerprint prepared; parent coordinates frozen branch/reviewer access after review. |
+| Certification request / official badge | Select **Request Power BI certification** in Partner Center's Product setup and provide source/reviewer-access details in Notes for certification. The official badge follows Microsoft's certification grant, not merely selecting the checkbox. [Request](https://learn.microsoft.com/en-us/power-bi/developer/visuals/power-bi-custom-visuals-certified#submit-a-power-bi-visual-for-certification), [badges](https://learn.microsoft.com/en-us/power-bi/developer/visuals/power-bi-custom-visuals-certified#certified-power-bi-visual-badges) | Owner requests this certification, not the IAP "additional purchase" label. No badge asset/placement is pending. Parent owns submission after the final gate and records Microsoft's decision; no request receipt or grant is recorded here. |
 | Certification build | Latest API/tools; required source/config/lock files; TypeScript, ESLint and official Power BI ESLint plugin; successful install/lint/package; no moderate/high audit warnings. Exclude `node_modules`, `.tmp` and `dist` from submitted source. [File/build requirements](https://learn.microsoft.com/en-us/power-bi/developer/visuals/power-bi-custom-visuals-certified#file-requirements) | Pin compatible versions, local commands only, exact source/package/evidence identity. Rebuilding ZIP timestamps can change byte hashes; do not reuse an old checksum. |
 | Lifecycle | Every update starts rendering and ends with exactly one finished/failed signal. Certification explicitly requires events, and the event reference states publication will not be approved without them. [Rendering events](https://learn.microsoft.com/en-us/power-bi/developer/visuals/event-service) | Unit/package lifecycle evidence; real-host/export behavior remains manual. |
 | No-network certification | No external services/resources, HTTP/S/WebSocket calls, unsafe dynamic evaluation/DOM insertion, unreviewable minified source or console errors; public reviewable OSS. [Source requirements](https://learn.microsoft.com/en-us/power-bi/developer/visuals/power-bi-custom-visuals-certified#source-code-requirements) | Source/bundle/notice audit plus actual-package browser network evidence. This is a certification restriction, not a universal prohibition on every noncertified AppSource offer. |
@@ -39,6 +42,24 @@ The local sample demonstrates the Atlyn exception workflow and retains native co
 
 ## Decisions reserved to the owner
 
-Publisher enrollment/identity, price/license/free-paid disclosures, approved support/privacy/EULA, languages/geographies, reviewer access, screenshot-size discrepancy, native PBIX/host acceptance, certification timing, final submission and go-live remain owner decisions. Standard Contract selection can constrain later contract changes; do not invent this choice. [Contract options](https://learn.microsoft.com/en-us/partner-center/marketplace-offers/power-bi-visual-properties#use-the-standard-contract).
+**Subsequent owner decision, 2026-09-10:** acquisition uses existing Atlyn
+storefront subscriptions; visuals are ungated with free shared viewing. Runtime
+licensing and paid-author enforcement are not required. This decision is not a
+Microsoft policy conclusion or a source-license change.
+
+Publisher enrollment/identity, accurate disclosures of that approved model,
+existing commercial terms, support/privacy/EULA, languages/geographies, reviewer
+access, screenshot-size discrepancy, the official Power BI certification request,
+native PBIX/host acceptance, certification timing, final submission and go-live
+remain owner/parent responsibilities. Standard Contract selection can constrain
+later contract changes; do not invent this choice.
+[Contract options](https://learn.microsoft.com/en-us/partner-center/marketplace-offers/power-bi-visual-properties#use-the-standard-contract).
+
+The owner clarified on 2026-09-10 that the requested badge is Microsoft's
+official **Power BI certified** badge, not a separate graphic or the IAP
+"additional purchase" label. There is no parent badge asset/placement blocker.
+Do not add an in-visual badge or claim certification before Microsoft grants it.
+Native results remain forthcoming and submission stays behind the final parent
+gate.
 
 Certification is optional and is not automatic for later updates. Microsoft recommends publishing before requesting certification if certification would delay availability; the owner's release strategy controls that decision. [Certification guidance](https://learn.microsoft.com/en-us/power-bi/developer/visuals/power-bi-custom-visuals-certified).

@@ -1,6 +1,6 @@
 # Local quality evidence and performance method
 
-The quality pass starts from merged `origin/main` (`115247c`) and produces candidate **1.0.1.0**, retaining GUID `AtlynResourceCapacityC72F07AC931A4BD196369E890FA879E2`. All work and execution stay in this worktree. GitHub Actions are disabled; no hosted CI is part of acceptance.
+The historical quality pass starts from merged `origin/main` (`115247c`) and produces candidate **1.0.1.0**, retaining GUID `AtlynResourceCapacityC72F07AC931A4BD196369E890FA879E2`. The later **1.0.2.0 native retry** is documented separately below; the original results and sealed files are not relabeled as new-version evidence. All work and execution stay in this worktree. GitHub Actions are disabled; no hosted CI is part of acceptance.
 
 ## Independent product corrections
 
@@ -97,5 +97,65 @@ PBIR `definition\version.json` was already present. Sample validators now guard
 both risks, with a separate installed-official-TOM deserialization command.
 This does not change the historical gate results or sealed files above.
 A distinct provisional sample retry uses the identical package bytes; it is
-not native render proof or a final paid/submission build. See
+not native render proof or submission approval. See
 [sample preflight](sample-binding.md#official-tom-preflight-and-the-provisional-retry).
+
+## Owner-approved runtime model
+
+On 2026-09-10 the owner approved existing Atlyn storefront subscriptions for
+acquisition, with ungated visuals and free shared viewing. The current offline
+renderer is intended; there is no pending licensing integration or paid-author
+enforcement to implement. Do not add keys, signers, AAD, entitlement APIs,
+feature gates, WebAccess or runtime licensing requests. The package/version and
+all frozen evidence stay unchanged. Parent owns native PBIX/host acceptance,
+final assets and final publication gates.
+
+The owner's badge clarification on 2026-09-10 refers to Microsoft's official
+**Power BI certified** badge, requested through Partner Center's **Request Power
+BI certification** checkbox. It is not the IAP "additional purchase" label, and
+there is no parent-supplied badge asset or placement task. No certification
+request receipt or Microsoft grant is recorded here; native results are still
+forthcoming. Do not add an in-visual badge or claim certification before
+Microsoft grants it. This documentation correction changes no runtime or
+historical evidence.
+
+## Native date-key correction (1.0.2.0)
+
+On 2026-09-10 the parent reported that Desktop 2.157.1354.0 opened the corrected
+PBIP and refreshed its inline model, but Capacity rejected the People sample
+with the invalid Resource/Period key message. The actual PBIR projects
+`People.Period` and `Machines.Period` as direct columns, not hierarchy levels;
+the model supplies `dateTime` columns from literal M `#date` values.
+
+The unchanged 1.0.1.0 package reproduced that exact error with both sanitized
+samples when valid Dates were constructed in a different browser frame:
+zero cells instead of 12 People / 15 Machines cells. This confirms a runtime
+cross-realm defect independently of the parent's native observation; it does
+not prove the native host's internal value representation.
+
+Version 1.0.2.0 tests the intrinsic Date slot with `Date.prototype.getTime.call`
+and supplies local Date copies to the SDK formatter. Exact timestamps, source
+formats and chronological order are preserved. It neither parses date strings
+nor rebuckets periods. Original host category objects, values and identities
+remain untouched. Invalid Dates, spoofed Date objects and non-Date values in a
+date-typed Period still fail validation; duplicate instants never sum capacity.
+
+Targeted local commands for this correction:
+
+```powershell
+npm test -- tests\data.test.ts tests\visual.test.ts tests\bound-samples.test.ts
+npm run typecheck
+npm run lint
+npm run audit:sdk
+$env:CAPACITY_BROWSER_CHANNEL = 'msedge'
+npm run test:browser -- 'package\.spec\.mjs'
+npm run audit:certification
+```
+
+The distinct provisional retry contains the new package, exact embedded sample,
+source archive, before/after regression logs, official JSON Schema and TOM
+preflight evidence, and real-package foreign-Date screenshots. Its manifest
+records exact bytes/hash and results. These are local mock-host results, not
+Desktop acceptance. Historical 1.0.1.0 performance and full-quality figures do
+not certify 1.0.2.0; native rerender/selection/export and final release gates
+remain parent-owned. No licensing, badge, scheduling or writeback code changed.

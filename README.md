@@ -7,6 +7,19 @@ Atlyn Resource Capacity is a read-only Power BI custom visual for comparing allo
 **First-release source · private distribution · certification-oriented, not Microsoft certified.**
 There is no claim of AppSource publication, completed Desktop/service acceptance, or legal approval. See the [submission checklist](docs/submission-checklist.md) before distributing a release.
 
+## Acquisition and shared viewing
+
+**Owner-approved model: storefront subscriptions, ungated visuals.** Acquisition
+uses existing Atlyn subscriptions outside Power BI. The visual itself has no
+license checks or feature gates; recipients can view shared reports for free
+without an Atlyn viewer subscription or runtime activation.
+
+This is not paid-author enforcement inside Power BI. No license keys, signer,
+AAD flow, entitlement API, WebAccess or external runtime licensing calls are
+required. The existing offline renderer is the intended runtime, so licensing
+integration is not a release blocker. This access model does not relicense the
+source or override Power BI licensing, access permissions, tenant policies or report sharing.
+
 ## What it does
 
 - Presents resource-period allocation, availability, utilization, and overload exceptions.
@@ -143,7 +156,7 @@ For only the compiled-package browser checks, replace `npm run package` with `np
 | `npm run audit:sdk` | Power BI SDK packaging with `--certification-audit` |
 | `npm run audit:certification` | Repository package inspection; distinct from the SDK audit |
 
-The quality candidate is **1.0.1.0**, using the original stable GUID. For an exact-byte release run, use the command below. It performs source gates, builds once using the SDK certification audit, then runs package browser checks, static/dependency audits, real-package captures at five tile sizes, a 30-sample benchmark with DevTools profiles, and bound-sample generation with official JSON Schema validation. Dependency audits and schema validation access public metadata; private source/model/package content is not uploaded. `dist\local-evidence\gates.json` records command exits and the exact package hash; a failed run does not produce a successful gate record.
+The sealed quality baseline is **1.0.1.0**. The current **1.0.2.0 native retry** fixes cross-realm Date handling, using the original stable GUID; it still requires parent-owned native acceptance. See the [date-key correction](docs/quality-evidence.md#native-date-key-correction-1020). For an exact-byte full release run, use the command below. It performs source gates, builds once using the SDK certification audit, then runs package browser checks, static/dependency audits, real-package captures at five tile sizes, a 30-sample benchmark with DevTools profiles, and bound-sample generation with official JSON Schema validation. Dependency audits and schema validation access public metadata; private source/model/package content is not uploaded. `dist\local-evidence\gates.json` records command exits and the exact package hash; a failed run does not produce a successful gate record.
 
 ```powershell
 $env:CAPACITY_BROWSER_CHANNEL = 'msedge'
@@ -175,4 +188,4 @@ The visual is a read-only renderer of data supplied by Power BI and requests no 
 
 The confirmed existing Atlyn metadata uses author **Atlyn**, support URL <https://www.atlynco.com/docs/faq>, contact <atlyn.help@gmail.com>, and this project's own private GitHub repository. These are not placeholder metadata blockers. Support responsiveness, publication-ready privacy terms, and support commitments still require manual review before release. When reporting an issue, share the visual version, host version, reproduction steps, and sanitized data—not confidential assignments or employee records.
 
-This private source is **proprietary / `UNLICENSED`**. No open-source grant for Atlyn's code, free-use commercial terms, approved EULA, or distribution approval is implied. Third-party components retain their own licenses; see [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt).
+This private source remains **proprietary / `UNLICENSED`**. There is no tracked first-party `LICENSE` or `COPYING` file; `package.json` declares `UNLICENSED`. The approved ungated runtime/free shared viewing model does not grant an open-source license or change source redistribution rights. Existing subscription/distribution terms, EULA and publication approvals remain the owner's responsibility. Third-party components retain their own licenses; see [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt).

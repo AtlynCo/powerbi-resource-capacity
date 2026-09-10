@@ -1,11 +1,57 @@
 /* global window, document, getComputedStyle */
 import { test, expect } from "@playwright/test";
+import { readFileSync } from "node:fs";
 import { readPackage } from "../../scripts/package-lib.mjs";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await expect(page.locator('[role="grid"]')).toBeVisible();
 });
+
+for (const [sample, rowCount, periodCount] of [["people-hours-by-week", 12, 4], ["machine-hours-by-day", 15, 5]]) {
+  test(`cross-realm Dates render the exact ${sample} sample and retain host selections`, async ({ page }, testInfo) => {
+    await page.setViewportSize({ width: 1366, height: 768 });
+    const rows = readFileSync(`samples\\${sample}.csv`, "utf8").trim().split(/\r?\n/).slice(1).map(line => line.split(","));
+    const result = await page.evaluate(rows => {
+      const frame = document.createElement("iframe");
+      frame.hidden = true;
+      document.body.append(frame);
+      const api = window.capacityTest, view = api.makeView({ rows: 1, columns: rows.length });
+      const categories = view.categorical.categories;
+      categories[0].values = rows.map(row => row[0]);
+      categories[0].source.queryName = "NativeSample.Resource";
+      categories[1].values = rows.map(row => new frame.contentWindow.Date(`${row[1]}T00:00:00`));
+      categories[1].source.queryName = "NativeSample.Period";
+      categories[1].source.type = { dateTime: true };
+      categories[1].source.format = "yyyy-MM-dd";
+      for (const category of categories) category.identity = category.values.map((_, index) => ({ key: `native-${category.source.queryName}-${index}` }));
+      for (const [index, field] of [2, 3, 4, 5].entries()) view.categorical.values[index].values = rows.map(row => row[field] === "" ? null : Number(row[field]));
+      const originalDate = categories[1].values[0], localInstance = originalDate instanceof Date;
+      api.updateView(view, 1280, 620);
+      return {
+        localInstance, untouched: originalDate === api.getView().categorical.categories[1].values[0],
+        cells: document.querySelectorAll(".cell").length, status: document.querySelector(".status").textContent
+      };
+    }, rows);
+    expect(result.localInstance).toBe(false);
+    expect(result.untouched).toBe(true);
+    expect(result.cells, result.status).toBe(rowCount);
+    await expect(page.locator("thead th:not(.corner)")).toHaveCount(periodCount);
+    await expect(page.locator("thead th").nth(1)).toHaveText(rows[0][1]);
+    await expect(page.locator(".resource").first()).toHaveText(rows[0][0]);
+    const overloaded = page.locator(".cell.state-overload").first();
+    await overloaded.click();
+    await expect(overloaded).toHaveAttribute("aria-selected", "true");
+    if (sample === "people-hours-by-week") await expect(overloaded).toContainText("44.0 / 40.0");
+    const builds = await page.evaluate(() => window.capacityTest.events.identityBuilds.slice(-window.capacityTest.getView().categorical.categories[0].values.length));
+    expect(builds[1]).toEqual([
+      { queryName: "NativeSample.Resource", index: 1, identity: "native-NativeSample.Resource-1" },
+      { queryName: "NativeSample.Period", index: 1, identity: "native-NativeSample.Period-1" }
+    ]);
+    expect(await page.evaluate(() => window.capacityTest.events.failures)).toEqual([]);
+    await page.screenshot({ path: testInfo.outputPath(`${sample}-foreign-dates.png`) });
+  });
+}
 
 test("compiled plugin renders authoritative amounts, exceptions and mocked host interactions", async ({ page }) => {
   const first = page.locator(".cell").first();

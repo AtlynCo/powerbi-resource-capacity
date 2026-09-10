@@ -2,11 +2,19 @@
 
 ## Atlyn source
 
-This is a private, proprietary source repository. The package declares `UNLICENSED`; that means no open-source license is granted for Atlyn's source. It does not establish approved commercial terms or authorize redistribution.
+This is a private, proprietary source repository. There is no tracked first-party `LICENSE` or `COPYING` file. `package.json` declares `UNLICENSED`; no open-source grant for Atlyn's source is supplied. This documentation update preserves that state and does not add, replace or relicense first-party terms.
+
+On 2026-09-10 the owner approved **storefront subscriptions, ungated visuals**:
+existing Atlyn subscriptions govern external acquisition, while the visual
+runtime has no licensing checks or feature gates and shared viewing is free.
+This is not runtime paid-author or viewer enforcement. It requires no license
+keys, new signer, AAD flow, entitlement API, WebAccess or external runtime calls.
+Runtime access behavior and source licensing are separate: free shared viewing
+does not create an open-source or source-redistribution grant.
 
 The original capacity-grid motif in `assets\icon.svg` and its PNG generation script are part of this source. They do not copy vendor artwork or imply a Microsoft certification badge.
 
-Before any release, the responsible owner must review source ownership, contributor permissions, offer terms, EULA, privacy statement, trademarks, support commitments, and the intended artifact distribution route. No legal review is represented as completed here.
+Before any release, the responsible owner must review source ownership, contributor permissions, existing subscription/distribution terms, EULA, privacy statement, trademarks and support commitments. The acquisition/runtime model is decided; implementing licensing enforcement is not a remaining task. No broader legal review is represented as completed here.
 
 ## Actual runtime utility dependencies
 
@@ -46,7 +54,7 @@ Run `npm run audit:all-dependencies` to include development dependencies and `np
 
 **Recorded result, September 9, 2026:** both runtime and full npm dependency audits reported **zero vulnerabilities** after the focused overrides. These point-in-time dependency results do not establish license approval, Microsoft certification, or safety of future dependency updates. Archive the audit evidence with the exact release lockfile and rerun after changes.
 
-The final local logs record passing source, SDK, package and sample-schema gates, **225 unit/host/sample tests**, and **55 compiled-package browser checks**; see the [engineering evidence snapshot](submission-checklist.md#current-engineering-evidence). Installed Edge Chromium was the browser channel. Edge harness results are not Desktop/service-host proof. Do not infer completed manual acceptance or notice/license approval from automated checks alone.
+The historical 1.0.1.0 local logs record passing source, SDK, package and sample-schema gates, **225 unit/host/sample tests**, and **55 compiled-package browser checks**; see the [engineering evidence snapshot](submission-checklist.md#historical-1010-engineering-evidence). The 1.0.2.0 native Date retry has separate targeted evidence. Installed Edge Chromium was the browser channel. Edge harness results are not Desktop/service-host proof. Do not infer completed manual acceptance or notice/license approval from automated checks alone.
 
 ## Release audit gate
 

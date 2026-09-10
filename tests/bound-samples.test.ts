@@ -72,6 +72,17 @@ describe("fully bound offline PBIP sample", () => {
     expect(checked.documents).toHaveLength(14);
   });
 
+  it("rejects a period hierarchy in place of the sample's direct Period column", () => {
+    const copiedRoot = copySource("period-hierarchy");
+    const visualPath = join(copiedRoot, gridPath);
+    const container = JSON.parse(readFileSync(visualPath, "utf8"));
+    const projection = container.visual.query.queryState.period.projections[0];
+    expect(projection.field).toEqual({ Column: { Expression: { SourceRef: { Entity: "People" } }, Property: "Period" } });
+    projection.field = { HierarchyLevel: { Expression: projection.field, Level: "Day" } };
+    writeFileSync(visualPath, JSON.stringify(container));
+    expect(() => binding.validateSource(copiedRoot)).toThrow();
+  });
+
   it("uses the observed private CustomVisualMetadata registration, not a store or native placeholder", () => {
     expect(binding.packageBinding(fixture())).toEqual({
       name: config.visual.guid, type: "CustomVisual",
