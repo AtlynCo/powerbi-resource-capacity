@@ -8,6 +8,82 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator('[role="grid"]')).toBeVisible();
 });
 
+test("key diagnostic shows compiled version and row/role/type only, without accepting invalid dates", async ({ page }) => {
+  const { manifest } = readPackage();
+  await page.evaluate(() => {
+    const view = window.capacityTest.makeView({ rows: 1, columns: 2 });
+    view.categorical.categories[0].values = ["PRIVATE_RESOURCE", "PRIVATE_RESOURCE"];
+    view.categorical.categories[1].source.type = { dateTime: true };
+    view.categorical.categories[1].values = [new Date(2026, 7, 3), "PRIVATE_DATE_VALUE"];
+    window.capacityTest.updateView(view);
+  });
+  await expect(page.locator(".status")).toContainText(`Input diagnostic: visual ${manifest.visual.version}; row 2; role Period; type string; expected Date.`);
+  await expect(page.locator(".status")).toContainText("Serialized date format: other; validity: invalid-or-unsupported.");
+  await expect(page.locator(".atlyn-capacity")).not.toContainText("PRIVATE_");
+  await expect(page.locator(".cell")).toHaveCount(0);
+  await page.evaluate(() => window.capacityTest.resize(80, 80));
+  await expect(page.locator(".tiny-summary")).toBeVisible();
+  await expect(page.locator(".tiny-summary")).toHaveAttribute("aria-label", /row 2; role Period; type string; expected Date/);
+});
+
+for (const timezoneId of ["UTC", "America/New_York"]) {
+  test.describe(`serialized native Periods in ${timezoneId}`, () => {
+    test.use({ timezoneId, viewport: { width: 1366, height: 768 } });
+    for (const sample of ["people-hours-by-week", "machine-hours-by-day"]) {
+      for (const form of ["ISO-date", "ISO-datetime-no-zone", "ISO-datetimeZ", "ISO-datetime-offset"]) {
+        test(`${sample} ${form} preserves model labels, amounts and original string identities`, async ({ page }, testInfo) => {
+          const rows = readFileSync(`samples\\${sample}.csv`, "utf8").trim().split(/\r?\n/).slice(1).map(line => line.split(","));
+          const result = await page.evaluate(({ rows, form }) => {
+            const api = window.capacityTest, view = api.makeView({ rows: 1, columns: rows.length });
+            const categories = view.categorical.categories;
+            categories[0].values = rows.map(row => row[0]);
+            categories[1].values = rows.map(row => form === "ISO-date" ? row[1] :
+              form === "ISO-datetime-no-zone" ? `${row[1]}T00:00:00` :
+                new Date(`${row[1]}T00:00:00`).toISOString().replace("Z", form === "ISO-datetime-offset" ? "+00:00" : "Z"));
+            categories[1].source.type = { dateTime: true };
+            categories[1].source.format = "yyyy-MM-dd";
+            for (const category of categories) category.identity = category.values.map((_, index) => ({ key: `native-row-${index}` }));
+            for (const [index, field] of [2, 3, 4, 5].entries()) view.categorical.values[index].values = rows.map(row => row[field] === "" ? null : Number(row[field]));
+            const original = categories[1].values, before = [...original];
+            api.updateView(view, 1280, 620);
+            return {
+              cells: document.querySelectorAll(".cell").length,
+              status: document.querySelector(".status").textContent,
+              untouched: original === api.getView().categorical.categories[1].values && original.every((value, index) => value === before[index]),
+              selection: `${rows[1][0]}|${before[1]}`
+            };
+          }, { rows, form });
+          expect(result.cells, result.status).toBe(rows.length);
+          expect(result.untouched).toBe(true);
+          await expect(page.locator("thead th").nth(1)).toHaveText(rows[0][1]);
+          const cell = page.locator('.cell[data-row="0"][data-col="1"]');
+          await expect(cell).toContainText(sample === "people-hours-by-week" ? "44.0 / 40.0" : "24.0 / 20.0");
+          await cell.click();
+          await expect(cell).toHaveAttribute("aria-selected", "true");
+          expect(await page.evaluate(() => window.capacityTest.events.selections.at(-1))).toEqual([result.selection]);
+          expect(await page.evaluate(() => window.capacityTest.events.failures)).toEqual([]);
+          if (timezoneId === "UTC" && form === "ISO-datetimeZ") {
+            await page.screenshot({ path: testInfo.outputPath(`${sample}-serialized-dates.png`) });
+          }
+        });
+      }
+    }
+    if (timezoneId === "America/New_York") {
+      test("rejects nonexistent local clock time without rolling into another period or exposing values", async ({ page }) => {
+        await page.evaluate(() => {
+          const view = window.capacityTest.makeView({ rows: 1, columns: 1 });
+          view.categorical.categories[1].source.type = { dateTime: true };
+          view.categorical.categories[1].values = ["2026-03-08T02:30:00"];
+          window.capacityTest.updateView(view);
+        });
+        await expect(page.locator(".cell")).toHaveCount(0);
+        await expect(page.locator(".status")).toContainText("ISO-datetime-no-zone; validity: invalid-or-unsupported");
+        await expect(page.locator(".atlyn-capacity")).not.toContainText("2026-03-08");
+      });
+    }
+  });
+}
+
 for (const [sample, rowCount, periodCount] of [["people-hours-by-week", 12, 4], ["machine-hours-by-day", 15, 5]]) {
   test(`cross-realm Dates render the exact ${sample} sample and retain host selections`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width: 1366, height: 768 });

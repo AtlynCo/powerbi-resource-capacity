@@ -159,3 +159,53 @@ records exact bytes/hash and results. These are local mock-host results, not
 Desktop acceptance. Historical 1.0.1.0 performance and full-quality figures do
 not certify 1.0.2.0; native rerender/selection/export and final release gates
 remain parent-owned. No licensing, badge, scheduling or writeback code changed.
+
+## Native follow-up: diagnostic only (1.0.3.0)
+
+The parent subsequently retried the preserved 1.0.2.0 sample in a fresh Desktop
+copy and still observed the same key diagnostic with no People cells. Native
+rendering therefore remains **blocked**. The cross-realm regression fix is
+established locally but did not establish resolution of the native failure.
+
+The separate 1.0.3.0 diagnostic candidate changes no accepted input types or
+sample values. Its key error adds only the compiled visual version, first
+offending row (1-based within the delivered categorical snapshot), fixed role,
+actual type and expected key/Date type. It includes no resource names, column
+names, values, timestamps, lengths, constructor names or custom object tags.
+The message also remains available in the tiny-tile accessible summary.
+
+Parent observation of that exact diagnostic is the next evidence needed.
+The version marker can distinguish a newly executed diagnostic runtime from
+an older cached runtime; absence of the marker is not itself proof of a cache
+cause. `null`/`undefined`, `string`/`number`, `InvalidDate`, or `object` should
+guide a focused investigation, not a broad fallback or silent row skipping.
+No claim that the native bug is fixed is made. The reviewed remote PR head must
+not be advanced without prior coordination; native UI remains parent-owned.
+
+## Native serialized Date correction (1.0.4.0)
+
+The parent's decisive 1.0.3.0 native observation was `row 1; role Period; type
+string; expected Date`. That establishes the executed diagnostic runtime and
+rules out simply attributing this observation to a cached 1.0.1.0 renderer.
+The model and direct PBIR Period projection remain unchanged. The exact string
+value/format was not collected.
+
+Version 1.0.4.0 normalizes strictly validated ISO strings only when Period host
+metadata declares `dateTime`. It retains genuine/cross-realm Date support,
+source formatting, raw ISO labels and original host category values/identities.
+See the [precise supported forms and timezone/precision semantics](data-contract.md#native-serialized-date-values).
+Unsupported strings still fail; their diagnostic adds only format/validity enums.
+No locale parsing, epoch coercion, row skipping or model rewrite is introduced.
+
+The old compiled 1.0.3.0 package reproduced the parent's exact row-1/string
+diagnostic for the sanitized People sample serialized as ISO datetime-Z.
+New regressions cover both samples in four ISO forms, UTC and America/New_York,
+original string selection identities, invalid calendars/offsets/submillisecond
+precision, local DST gaps and Date/ISO duplicate-capacity safety.
+These are actual-package local mocks, not a claim of native resolution.
+
+The new review branch starts from actual main `21e26fe243ad`; diagnostic commit
+`3957f440` is preserved on its original branch and cherry-picked onto the new
+branch. The distinct `dist\capacity-native-retry-20260910-4` manifest identifies
+the exact package, source, sample and local evidence for parent native retry.
+Earlier 1.0.1.0, 1.0.2.0 and 1.0.3.0 sealed folders remain unchanged.

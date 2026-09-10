@@ -1,6 +1,6 @@
 # Atlyn Resource Capacity submission dossier
 
-**Prepared for owner review, not submitted.** Current native retry 1.0.2.0 fixes cross-realm Date handling; the sealed full-quality baseline remains 1.0.1.0. Neither is Microsoft certified. The parent coordinates native Power BI and Partner Center; this session does not manipulate those shared UIs or invent commercial approvals.
+**Prepared for owner review, not submitted.** Current native retry 1.0.4.0 normalizes strictly supported ISO strings for host-declared Date periods. The sealed full-quality baseline remains 1.0.1.0; earlier native retries did not establish native rendering acceptance. No version is Microsoft certified. The parent coordinates native Power BI and Partner Center; this session does not manipulate those shared UIs or invent commercial approvals.
 
 ## Approved acquisition and runtime model
 
@@ -14,8 +14,8 @@ or external runtime license calls are to be added. The current offline renderer
 is the intended runtime; runtime licensing integration is **not a blocker**.
 No repackaging or version bump is needed for this documentation-only decision.
 Frozen folders remain historical evidence and must not be rewritten.
-The subsequent 1.0.2.0 version bump is solely for the native date-key correction,
-not licensing or a badge. See [separate retry evidence](quality-evidence.md#native-date-key-correction-1020).
+The subsequent version bumps are solely for native date-key corrections and
+diagnostics, not licensing or a badge. See [separate retry evidence](quality-evidence.md#native-serialized-date-correction-1040).
 
 ## Proposed listing copy
 
@@ -43,7 +43,7 @@ Do not add “certified”, “best”, “market-leading”, automatic scheduli
 | Field | Value |
 |---|---|
 | GUID | `AtlynResourceCapacityC72F07AC931A4BD196369E890FA879E2` |
-| Visual version | `1.0.2.0` provisional native retry; historical baseline `1.0.1.0` |
+| Visual version | `1.0.4.0` native retry awaiting acceptance; historical baseline `1.0.1.0` |
 | API declaration | `5.11.0` |
 | SDK API package / tools | `5.11.1` / `7.2.1` |
 | Runtime permissions | `privileges: []` |
@@ -52,7 +52,7 @@ Do not add “certified”, “best”, “market-leading”, automatic scheduli
 | Source license status | No tracked first-party LICENSE/COPYING; package declares `UNLICENSED`; no relicensing |
 | Support metadata | `https://www.atlynco.com/docs/faq`; `atlyn.help@gmail.com`; author Atlyn |
 | Repository | Private `AtlynCo/powerbi-resource-capacity` |
-| Exact source/package/assets | Retry manifest for 1.0.2.0; sealed `manifest.json` for historical 1.0.1.0. Do not mix their bytes or evidence. |
+| Exact source/package/assets | Retry manifest for 1.0.4.0; sealed `manifest.json` for historical 1.0.1.0. Do not mix their bytes or evidence. |
 
 The earlier quality PR has merged; subsequent changes remain subject to the
 parent's final gate. Do not move main or the lowercase `certification` ref, merge
@@ -61,7 +61,7 @@ repository is not silently assumed.
 
 ## Proposed assets
 
-The original icon is supplied at 20x20 (`icon.png`) and 300x300 (`icon-300.png`). The historical 1.0.1.0 bundle has three unaltered 1366x768 package captures under `screenshots\listing`: people-hours overview, people cell details, and machine-hours overview. Each has exact bytes/hash and a provenance statement in `capture.json`. They are not relabeled as 1.0.2.0 assets; the retry's foreign-Date screenshots are separate diagnostic evidence.
+The original icon is supplied at 20x20 (`icon.png`) and 300x300 (`icon-300.png`). The historical 1.0.1.0 bundle has three unaltered 1366x768 package captures under `screenshots\listing`: people-hours overview, people cell details, and machine-hours overview. Each has exact bytes/hash and a provenance statement in `capture.json`. They are not relabeled as current-version assets; the 1.0.4.0 retry has separate real-package serialized-Date and cross-realm-Date screenshots with mock-host provenance.
 
 **The owner requests Microsoft's official "Power BI certified" badge.** This
 means selecting **Request Power BI certification** in Partner Center's Product

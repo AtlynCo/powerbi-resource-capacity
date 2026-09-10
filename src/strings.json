@@ -56,6 +56,8 @@
   "bind": "Bind one stable Resource, one Period, Allocated amount and Available capacity. Use only the optional measures shown in the field wells.",
   "shape": "Inconsistent category/measure lengths or a source format longer than 512 characters. No analysis is shown; check the model or refresh.",
   "keys": "Resource and Period must be nonblank, finite keys of at most 512 characters. Dates must be valid dates; do not bind a date hierarchy.",
+  "KeyDiagnostic": "Input diagnostic: visual {0}; row {1}; role {2}; type {3}; expected {4}.",
+  "SerializedDateDiagnostic": "Serialized date format: {0}; validity: {1}.",
   "order": "Period order is missing, nonfinite, inconsistent for a label, or shared by different labels. Supply one unique order per label.",
   "UnitRequired": "Set Analysis contract > Compatible unit (for example hours or FTE). Both measures must use the same unit.",
   "Empty": "No resource-period data in this report context.",

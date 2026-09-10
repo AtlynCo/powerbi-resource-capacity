@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { Visual } from "../src/visual";
 import { makeHost, makeSelectionId, makeUpdate, makeView } from "./fixtures";
 import type powerbi from "powerbi-visuals-api";
+import config from "../pbiviz.json";
 
 // Vite transpiles without the SDK const-enum inlining used by the real package compiler.
 vi.mock("powerbi-visuals-api", () => ({ default: { VisualUpdateType: { Data: 2, Style: 16 } } }));
@@ -25,6 +26,24 @@ function setup() {
 }
 
 describe("native host lifecycle", () => {
+  it("shows a bounded type-only key diagnostic and version without exposing data, including tiny tiles", () => {
+    const { root, visual, view } = setup();
+    view.categorical.categories[0].values = ["PRIVATE_RESOURCE", "PRIVATE_RESOURCE"];
+    view.categorical.categories[1].source.type = { dateTime: true };
+    view.categorical.categories[1].values = [new Date(2026, 7, 3), "PRIVATE_DATE_VALUE"];
+    visual.update(makeUpdate(view));
+    const message = root.querySelector(".status")?.textContent;
+    expect(message).toContain(`Input diagnostic: visual ${config.visual.version}; row 2; role Period; type string; expected Date.`);
+    expect(message?.length).toBeLessThan(400);
+    expect(root.textContent).not.toContain("PRIVATE_");
+    expect(root.querySelector(".cell")).toBeNull();
+    visual.update(makeUpdate(view, { viewport: { width: 80, height: 80 } }));
+    expect(root.querySelector(".tiny-summary")?.getAttribute("aria-label")).toBe(message);
+    visual.update(makeUpdate(makeView({ metadata: { objects: { analysis: { unit: "hours" } } } })));
+    expect(root.querySelector(".status")?.textContent).not.toContain("Input diagnostic");
+    expect(root.querySelectorAll(".cell")).toHaveLength(2);
+  });
+
   it("requires real host constructor options", () => {
     expect(() => new Visual()).toThrow("constructor options");
   });

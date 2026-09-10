@@ -186,6 +186,27 @@ sealed bundle and 36-file sample-only retry remain unchanged. See
 The parent must retry the native grids using an editable copy; prior model
 refresh or local cross-frame rendering is not native acceptance of this package.
 
+The parent's subsequent 1.0.2.0 retry still reports the key error. A separate
+local-only **1.0.3.0 diagnostic** sample is under
+`dist\capacity-native-diagnostic-20260910-3\sample`, with its own package/hash
+and evidence. It retains the same rows, model and direct Period projections.
+Its error reports the compiled version plus first offending row/role/type only;
+it does not broaden accepted data or claim to fix the native failure. Use an
+editable copy for parent-owned observation, leaving all earlier artifacts intact.
+
+### Declared-dateTime string correction (1.0.4.0)
+
+The parent observed the actual 1.0.3.0 suffix: row 1, Period, type string,
+expected Date. The new **1.0.4.0** adapter accepts only the strictly supported
+ISO representations for a host-declared `dateTime` Period; unrecognized strings
+remain invalid with a format/validity-enum diagnostic. Sample rows, literal
+`#date` values and PBIR projections are unchanged.
+
+Use the distinct `dist\capacity-native-retry-20260910-4\sample` and exact package
+identified by its manifest. The prior diagnostic and retries remain historical
+evidence. Parent must confirm the native grid's dates, P01 Planner A / 44.0 amount,
+selection and sample behavior before claiming resolution or native acceptance.
+
 `--validate-schemas` is the **optional online** validation step. It downloads only
 public, versioned Microsoft JSON schemas, validates every project/report JSON
 document using the existing Ajv dependency, and records schema URL/hash pairs.
