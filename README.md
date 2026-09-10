@@ -7,6 +7,19 @@ Atlyn Resource Capacity is a read-only Power BI custom visual for comparing allo
 **First-release source · private distribution · certification-oriented, not Microsoft certified.**
 There is no claim of AppSource publication, completed Desktop/service acceptance, or legal approval. See the [submission checklist](docs/submission-checklist.md) before distributing a release.
 
+## Acquisition and shared viewing
+
+**Owner-approved model: storefront subscriptions, ungated visuals.** Acquisition
+uses existing Atlyn subscriptions outside Power BI. The visual itself has no
+license checks or feature gates; recipients can view shared reports for free
+without an Atlyn viewer subscription or runtime activation.
+
+This is not paid-author enforcement inside Power BI. No license keys, signer,
+AAD flow, entitlement API, WebAccess or external runtime licensing calls are
+required. The existing offline renderer is the intended runtime, so licensing
+integration is not a release blocker. This access model does not relicense the
+source or override Power BI licensing, access permissions, tenant policies or report sharing.
+
 ## What it does
 
 - Presents resource-period allocation, availability, utilization, and overload exceptions.
@@ -175,4 +188,4 @@ The visual is a read-only renderer of data supplied by Power BI and requests no 
 
 The confirmed existing Atlyn metadata uses author **Atlyn**, support URL <https://www.atlynco.com/docs/faq>, contact <atlyn.help@gmail.com>, and this project's own private GitHub repository. These are not placeholder metadata blockers. Support responsiveness, publication-ready privacy terms, and support commitments still require manual review before release. When reporting an issue, share the visual version, host version, reproduction steps, and sanitized data—not confidential assignments or employee records.
 
-This private source is **proprietary / `UNLICENSED`**. No open-source grant for Atlyn's code, free-use commercial terms, approved EULA, or distribution approval is implied. Third-party components retain their own licenses; see [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt).
+This private source remains **proprietary / `UNLICENSED`**. There is no tracked first-party `LICENSE` or `COPYING` file; `package.json` declares `UNLICENSED`. The approved ungated runtime/free shared viewing model does not grant an open-source license or change source redistribution rights. Existing subscription/distribution terms, EULA and publication approvals remain the owner's responsibility. Third-party components retain their own licenses; see [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt).

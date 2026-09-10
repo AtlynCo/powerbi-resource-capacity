@@ -2,11 +2,19 @@
 
 ## Atlyn source
 
-This is a private, proprietary source repository. The package declares `UNLICENSED`; that means no open-source license is granted for Atlyn's source. It does not establish approved commercial terms or authorize redistribution.
+This is a private, proprietary source repository. There is no tracked first-party `LICENSE` or `COPYING` file. `package.json` declares `UNLICENSED`; no open-source grant for Atlyn's source is supplied. This documentation update preserves that state and does not add, replace or relicense first-party terms.
+
+On 2026-09-10 the owner approved **storefront subscriptions, ungated visuals**:
+existing Atlyn subscriptions govern external acquisition, while the visual
+runtime has no licensing checks or feature gates and shared viewing is free.
+This is not runtime paid-author or viewer enforcement. It requires no license
+keys, new signer, AAD flow, entitlement API, WebAccess or external runtime calls.
+Runtime access behavior and source licensing are separate: free shared viewing
+does not create an open-source or source-redistribution grant.
 
 The original capacity-grid motif in `assets\icon.svg` and its PNG generation script are part of this source. They do not copy vendor artwork or imply a Microsoft certification badge.
 
-Before any release, the responsible owner must review source ownership, contributor permissions, offer terms, EULA, privacy statement, trademarks, support commitments, and the intended artifact distribution route. No legal review is represented as completed here.
+Before any release, the responsible owner must review source ownership, contributor permissions, existing subscription/distribution terms, EULA, privacy statement, trademarks and support commitments. The acquisition/runtime model is decided; implementing licensing enforcement is not a remaining task. No broader legal review is represented as completed here.
 
 ## Actual runtime utility dependencies
 

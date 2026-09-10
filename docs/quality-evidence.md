@@ -97,5 +97,15 @@ PBIR `definition\version.json` was already present. Sample validators now guard
 both risks, with a separate installed-official-TOM deserialization command.
 This does not change the historical gate results or sealed files above.
 A distinct provisional sample retry uses the identical package bytes; it is
-not native render proof or a final paid/submission build. See
+not native render proof or submission approval. See
 [sample preflight](sample-binding.md#official-tom-preflight-and-the-provisional-retry).
+
+## Owner-approved runtime model
+
+On 2026-09-10 the owner approved existing Atlyn storefront subscriptions for
+acquisition, with ungated visuals and free shared viewing. The current offline
+renderer is intended; there is no pending licensing integration or paid-author
+enforcement to implement. Do not add keys, signers, AAD, entitlement APIs,
+feature gates, WebAccess or runtime licensing requests. The package/version and
+all frozen evidence stay unchanged. Parent owns the required additional Power BI
+badge/final assets, native PBIX and final publication gates.

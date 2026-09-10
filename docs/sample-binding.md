@@ -162,9 +162,13 @@ The sealed rendering-evidence bundle at source `fb6631b8c540` is **unchanged**.
 The corrected sample is a **distinct provisional native-preflight retry**, using
 the same `1.0.1.0` package SHA-256
 `0f927e88f501a9351f4f5249dd93186bd768ba36fee8f188147e5fd9ec8e55c0`.
-It is not a rebuilt visual, final paid build, certification submission or
-replacement of sealed evidence. Parent owns Desktop preflight on an editable
-copy; paid/native/certification holds otherwise remain in force.
+It is not a rebuilt visual, certification submission or replacement of sealed
+evidence. The parent preserved the corrected 36-file retry durably and is
+preparing native PBIX evidence using an editable copy. The 2026-09-10 owner
+decision confirms storefront subscriptions with ungated runtime/free shared
+viewing, so this offline renderer needs no licensing integration. Native/final
+asset acceptance and the parent's main/certification/merge/submission gate remain
+in force. No version or package change accompanies this documentation update.
 
 `--validate-schemas` is the **optional online** validation step. It downloads only
 public, versioned Microsoft JSON schemas, validates every project/report JSON

@@ -39,6 +39,17 @@ The local sample demonstrates the Atlyn exception workflow and retains native co
 
 ## Decisions reserved to the owner
 
-Publisher enrollment/identity, price/license/free-paid disclosures, approved support/privacy/EULA, languages/geographies, reviewer access, screenshot-size discrepancy, native PBIX/host acceptance, certification timing, final submission and go-live remain owner decisions. Standard Contract selection can constrain later contract changes; do not invent this choice. [Contract options](https://learn.microsoft.com/en-us/partner-center/marketplace-offers/power-bi-visual-properties#use-the-standard-contract).
+**Subsequent owner decision, 2026-09-10:** acquisition uses existing Atlyn
+storefront subscriptions; visuals are ungated with free shared viewing. Runtime
+licensing and paid-author enforcement are not required. This decision is not a
+Microsoft policy conclusion or a source-license change.
+
+Publisher enrollment/identity, accurate disclosures of that approved model,
+existing commercial terms, support/privacy/EULA, languages/geographies, reviewer
+access, screenshot-size discrepancy, the required additional Power BI badge,
+native PBIX/host acceptance, certification timing, final submission and go-live
+remain owner/parent responsibilities. Standard Contract selection can constrain
+later contract changes; do not invent this choice.
+[Contract options](https://learn.microsoft.com/en-us/partner-center/marketplace-offers/power-bi-visual-properties#use-the-standard-contract).
 
 Certification is optional and is not automatic for later updates. Microsoft recommends publishing before requesting certification if certification would delay availability; the owner's release strategy controls that decision. [Certification guidance](https://learn.microsoft.com/en-us/power-bi/developer/visuals/power-bi-custom-visuals-certified).

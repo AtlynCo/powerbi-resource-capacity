@@ -6,7 +6,7 @@
 
 Use the exact frozen release directory and its `manifest.json` / `manifest.sha256`, not a prior build with the same version. See [quality evidence](quality-evidence.md), [submission dossier](submission-dossier.md) and [current public requirements](submission-research.md).
 
-The final local run recorded **225 passing unit/host/sample tests, 55 passing compiled-package browser tests, passing source/SDK/package/schema gates and zero vulnerabilities in runtime/full dependency audits**. These results do not check any parent-owned native or owner-approval box below.
+The final local run recorded **225 passing unit/host/sample tests, 55 passing compiled-package browser tests, passing source/SDK/package/schema gates and zero vulnerabilities in runtime/full dependency audits**. These engineering results do not constitute native or owner approval; the separate owner decision recorded below is explicitly identified.
 
 | Evidence | Reproducible local command / file |
 |---|---|
@@ -29,6 +29,7 @@ No GitHub workflow, CI badge, hosted check, Codespace, cloud build or Actions ru
 - Confirm stable GUID, API version, four-part visual version, package bytes/hash, source commit and lockfile.
 - Run local gates against the final package; do not rebuild after browser/capture/performance evidence.
 - Confirm the 20x20 package icon, 300x300 listing icon, and one to five proposed listing captures at the documented size.
+- Include the additional Power BI badge explicitly required by the owner once the parent supplies the approved asset/placement. It is not a Microsoft certification badge; leave frozen assets unchanged.
 - Inspect the actual package screenshots, not only screenshot file existence.
 - Review source and packaged OSS notices, `privileges: []`, no runtime telemetry/external assets/auth/licensing service and no unsafe DOM/dynamic code.
 - Inspect retained evidence before freezing. A successful public-certificate lookup is not signing, trust, or certification.
@@ -59,12 +60,20 @@ The PBIP and local mock-host evidence do not complete any of these native checkb
 ## Owner and publication acceptance
 
 - [ ] Approve source/artwork ownership, contribution rights, third-party redistribution and proprietary source access for Microsoft review.
-- [ ] Choose price, offer/license model and distribution terms. `UNLICENSED` is not an approved EULA or free-use promise.
+- [x] Owner approved on 2026-09-10: existing Atlyn storefront subscriptions for acquisition, ungated runtime and free shared viewing. No paid-author/viewer enforcement or runtime licensing integration is required.
+- [ ] Confirm applicable existing subscription/checkout/distribution terms. Preserve first-party `UNLICENSED` status and absence of a first-party LICENSE/COPYING file; no relicensing or new source grant.
 - [ ] Approve offer-specific EULA, privacy statement, support policy and publisher/company information.
 - [ ] Verify the existing support URL/contact are publication-ready and monitored.
 - [ ] Approve listing wording, categories, keywords, countries/locales and authentic screenshots. Do not call the visual certified or market-leading.
+- [ ] Receive and incorporate the owner's required additional Power BI badge and final assets, using parent-approved placement without implying certification.
 - [ ] Complete native sample report acceptance and attach the genuine PBIX required by the submission flow.
 - [ ] Recheck current Microsoft/Partner Center criteria, reviewer repository access and final certification-source branch.
 - [ ] Parent/authorized publisher performs Partner Center draft creation, validations and final submission. No live submission is implied by this dossier.
 
-The accountable reviewers must record **approved**, **blocked**, or **approved with limitations**, with exact artifact identity and supporting evidence. This checklist does not supply approval.
+Runtime licensing is no longer a blocker. Native acceptance, final assets,
+commercial/legal materials and the parent's final gate still apply. Hold main,
+certification refs, merges and submission until that gate; use no hosted CI or
+shared native UI from this session. The accountable reviewers must record
+**approved**, **blocked**, or **approved with limitations** for the remaining
+gates with exact artifact identity. Only the explicitly recorded owner decision
+above is approved by this checklist's evidence.
