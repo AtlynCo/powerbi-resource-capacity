@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { runInNewContext } from "node:vm";
 import { formatter, readData, shorten } from "../src/data";
 import { cellKey, LIMITS, resourceTotal } from "../src/model";
 import { makeHost, makeSource, makeValueColumn, makeValueColumns, makeView } from "./fixtures";
@@ -7,6 +8,7 @@ import type { NativeValue, ViewOptions } from "./fixtures";
 const read = (options: ViewOptions = {}) => readData(makeView(options), makeHost().host);
 const getCell = (result: ReturnType<typeof readData>, resource = "Ada", period = "Week 1") =>
   result.model.cells.get(cellKey(`string:${resource}`, `string:${period}`));
+const foreignDate = (time: number): Date => runInNewContext("new Date(time)", { time });
 
 describe("native categorical binding", () => {
   it.each([
@@ -236,6 +238,41 @@ describe("native resource-period values", () => {
 });
 
 describe("chronological and explicit period ordering", () => {
+  it("accepts cross-realm Dates with exact timestamp ordering and original host identities", () => {
+    const earlier = foreignDate(new Date(2026, 7, 3, 10, 30).getTime());
+    const later = foreignDate(new Date(2026, 7, 3, 11, 30).getTime());
+    expect(earlier instanceof Date).toBe(false);
+    const view = makeView({
+      periods: [later, earlier], periodOrder: [null, null],
+      sources: { period: { type: { dateTime: true }, format: "yyyy-MM-dd HH:mm" } }
+    });
+    const host = makeHost(), result = readData(view, host.host);
+    expect(result.error).toBeUndefined();
+    expect(result.model.periods.map(axis => axis.key)).toEqual([`date:${earlier.getTime()}`, `date:${later.getTime()}`]);
+    expect(result.model.periods.map(axis => axis.label)).toEqual(["2026-08-03 10:30", "2026-08-03 11:30"]);
+    expect(result.model.periods[0]?.rawLabel).toBe(earlier.toISOString());
+    expect(view.categorical.categories[1].values[0]).toBe(later);
+    expect(host.builders[0]?.withCategory).toHaveBeenNthCalledWith(2, view.categorical.categories[1], 0);
+    expect([...result.model.cells.values()].every(cell => cell.identity?.hasIdentity())).toBe(true);
+  });
+
+  it("rejects invalid cross-realm Dates and objects spoofing Date methods or tags", () => {
+    for (const value of [foreignDate(NaN), { [Symbol.toStringTag]: "Date", getTime: () => 0 },
+      Object.create(Date.prototype), { getTime: () => 0, toISOString: () => "2026-08-03" }]) {
+      const view = makeView({ sources: { period: { type: { dateTime: true } } } });
+      Reflect.set(view.categorical.categories[1].values, 0, value);
+      expect(readData(view, makeHost().host).error).toBe("keys");
+    }
+  });
+
+  it("detects duplicate instants across realms without summing capacity", () => {
+    const local = new Date(2026, 7, 3);
+    const result = read({ periods: [local, foreignDate(local.getTime())] });
+    expect(result.error).toBeUndefined();
+    expect(result.model.duplicateCount).toBe(1);
+    expect([...result.model.cells.values()][0]).toMatchObject({ state: "duplicate", capacity: null, identity: undefined });
+  });
+
   it("orders dates chronologically regardless of native row order or conflicting explicit ranks", () => {
     const earlier = new Date(2026, 0, 2);
     const later = new Date(2026, 1, 1);
@@ -284,6 +321,19 @@ describe("chronological and explicit period ordering", () => {
 });
 
 describe("source formatting, highlights, and tooltip data", () => {
+  it("formats cross-realm resource and tooltip Dates through the local SDK formatter", () => {
+    const date = foreignDate(new Date(2026, 7, 3).getTime());
+    const result = read({
+      resources: [date], periods: ["Week 1"],
+      sources: { resource: { type: { dateTime: true }, format: "yyyy-MM-dd" } },
+      tooltips: [{ values: [date], source: { displayName: "Date", type: { dateTime: true }, format: "yyyy-MM-dd" } }]
+    });
+    expect(result.error).toBeUndefined();
+    expect(result.model.resources[0]).toMatchObject({ key: `date:${date.getTime()}`, label: "2026-08-03" });
+    expect([...result.model.cells.values()][0]?.tooltips).toEqual([{ displayName: "Date", value: "2026-08-03" }]);
+    expect(formatter(makeSource("period", { format: "yyyy-MM-dd" }), "en-US")(date)).toBe("2026-08-03");
+  });
+
   it("uses each native numeric format independently for cells, totals and highlights", () => {
     const result = read({
       allocated: [1234.5, 0], capacity: [0.875, 0],

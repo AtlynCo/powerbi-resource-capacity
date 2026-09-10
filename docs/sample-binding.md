@@ -170,6 +170,22 @@ viewing, so this offline renderer needs no licensing integration. Native/final
 asset acceptance and the parent's main/certification/merge/submission gate remain
 in force. No version or package change accompanies this documentation update.
 
+### Later native date-key retry (1.0.2.0)
+
+The parent subsequently reported that Desktop 2.157.1354.0 opened and refreshed
+the corrected model, but the visual rejected valid People Date keys. Local
+cross-frame Date tests reproduced the exact rejection in 1.0.1.0. Version
+**1.0.2.0** corrects that runtime defect without changing sample rows, `#date`
+values, direct Period projections or the approved ungated runtime model.
+
+Use the new **distinct** `dist\capacity-native-retry-20260910-2\sample` and its
+binding manifest, not either historical 1.0.1.0 folder. The retry root retains
+the exact new package/hash, source and evidence manifest. The earlier 59-file
+sealed bundle and 36-file sample-only retry remain unchanged. See
+[date-key evidence](quality-evidence.md#native-date-key-correction-1020).
+The parent must retry the native grids using an editable copy; prior model
+refresh or local cross-frame rendering is not native acceptance of this package.
+
 `--validate-schemas` is the **optional online** validation step. It downloads only
 public, versioned Microsoft JSON schemas, validates every project/report JSON
 document using the existing Ajv dependency, and records schema URL/hash pairs.
@@ -183,7 +199,7 @@ before freezing the whole `dist\sample` directory with immutable release evidenc
 The unit tests use explicitly labeled synthetic archive fixtures to exercise the
 generator without requiring a build; those fixtures are not deliverables.
 
-**No actual Desktop validation is claimed.** JSON Schema checks, resolvable
+**No complete Desktop acceptance is claimed.** JSON Schema checks, resolvable
 references, literal data inspection, and byte identity cannot prove Desktop
 compatibility or host behavior. The release owner must still:
 

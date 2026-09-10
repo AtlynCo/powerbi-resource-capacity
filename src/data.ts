@@ -17,15 +17,30 @@ export interface DataResult {
 }
 export const shorten = (value: string): string => value.length > LIMITS.text ? value.slice(0, LIMITS.text - 3) + "..." : value;
 
+function localDate(value: powerbi.PrimitiveValue | undefined): Date | undefined {
+  if (value == null || typeof value !== "object") return undefined;
+  let time: number;
+  try {
+    // Host Dates can come from another frame; test the intrinsic Date slot, not its realm or tag.
+    time = Date.prototype.getTime.call(value);
+  } catch (error) {
+    if (error instanceof TypeError) return undefined;
+    throw error;
+  }
+  return new Date(time);
+}
+
 export function formatter(source: powerbi.DataViewMetadataColumn, locale: string): (value: powerbi.PrimitiveValue | undefined) => string {
   const format = valueFormatter.getFormatStringByColumn(source) ?? source.format;
   const f = valueFormatter.createDefaultFormatter(format, false, locale);
-  return value => value == null ? "-" : shorten(f.format(typeof value === "string" ? shorten(value) : value));
+  return value => value == null ? "-" : shorten(f.format(localDate(value) ?? (typeof value === "string" ? shorten(value) : value)));
 }
 
 function axis(value: powerbi.PrimitiveValue | undefined, label: string): Axis | undefined {
-  if (value instanceof Date) {
-    return Number.isFinite(value.getTime()) ? { key: `date:${value.getTime()}`, label, rawLabel: value.toISOString(), order: value.getTime() } : undefined;
+  const date = localDate(value);
+  if (date) {
+    const time = date.getTime();
+    return Number.isFinite(time) ? { key: `date:${time}`, label, rawLabel: date.toISOString(), order: time } : undefined;
   }
   if ((typeof value === "string" && value.trim() && value.length <= LIMITS.text) ||
       (typeof value === "number" && Number.isFinite(value))) return { key: `${typeof value}:${value}`, label, rawLabel: String(value) };
@@ -65,9 +80,10 @@ export function readData(view: powerbi.DataView | undefined, host: Host): DataRe
   for (let i = 0; i < Math.min(count, LIMITS.rows); i++) {
     const r = axis(resource.values[i], "");
     const p = axis(period.values[i], "");
-    if (!r || !p || (period.source.type?.dateTime && !(period.values[i] instanceof Date))) return { ...empty, error: "keys" };
+    const periodDate = localDate(period.values[i]);
+    if (!r || !p || (period.source.type?.dateTime && !periodDate)) return { ...empty, error: "keys" };
     r.label = fr(resource.values[i]); p.label = fp(period.values[i]);
-    if (order && !(period.values[i] instanceof Date)) {
+    if (order && !periodDate) {
       const value = order.values[i];
       if (typeof value !== "number" || !Number.isFinite(value)) return { ...empty, error: "order" };
       p.order = value;

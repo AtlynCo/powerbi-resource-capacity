@@ -54,7 +54,7 @@ Run `npm run audit:all-dependencies` to include development dependencies and `np
 
 **Recorded result, September 9, 2026:** both runtime and full npm dependency audits reported **zero vulnerabilities** after the focused overrides. These point-in-time dependency results do not establish license approval, Microsoft certification, or safety of future dependency updates. Archive the audit evidence with the exact release lockfile and rerun after changes.
 
-The final local logs record passing source, SDK, package and sample-schema gates, **225 unit/host/sample tests**, and **55 compiled-package browser checks**; see the [engineering evidence snapshot](submission-checklist.md#current-engineering-evidence). Installed Edge Chromium was the browser channel. Edge harness results are not Desktop/service-host proof. Do not infer completed manual acceptance or notice/license approval from automated checks alone.
+The historical 1.0.1.0 local logs record passing source, SDK, package and sample-schema gates, **225 unit/host/sample tests**, and **55 compiled-package browser checks**; see the [engineering evidence snapshot](submission-checklist.md#historical-1010-engineering-evidence). The 1.0.2.0 native Date retry has separate targeted evidence. Installed Edge Chromium was the browser channel. Edge harness results are not Desktop/service-host proof. Do not infer completed manual acceptance or notice/license approval from automated checks alone.
 
 ## Release audit gate
 
