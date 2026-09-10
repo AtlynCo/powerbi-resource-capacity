@@ -159,3 +159,25 @@ records exact bytes/hash and results. These are local mock-host results, not
 Desktop acceptance. Historical 1.0.1.0 performance and full-quality figures do
 not certify 1.0.2.0; native rerender/selection/export and final release gates
 remain parent-owned. No licensing, badge, scheduling or writeback code changed.
+
+## Native follow-up: diagnostic only (1.0.3.0)
+
+The parent subsequently retried the preserved 1.0.2.0 sample in a fresh Desktop
+copy and still observed the same key diagnostic with no People cells. Native
+rendering therefore remains **blocked**. The cross-realm regression fix is
+established locally but did not establish resolution of the native failure.
+
+The separate 1.0.3.0 diagnostic candidate changes no accepted input types or
+sample values. Its key error adds only the compiled visual version, first
+offending row (1-based within the delivered categorical snapshot), fixed role,
+actual type and expected key/Date type. It includes no resource names, column
+names, values, timestamps, lengths, constructor names or custom object tags.
+The message also remains available in the tiny-tile accessible summary.
+
+Parent observation of that exact diagnostic is the next evidence needed.
+The version marker can distinguish a newly executed diagnostic runtime from
+an older cached runtime; absence of the marker is not itself proof of a cache
+cause. `null`/`undefined`, `string`/`number`, `InvalidDate`, or `object` should
+guide a focused investigation, not a broad fallback or silent row skipping.
+No claim that the native bug is fixed is made. The reviewed remote PR head must
+not be advanced without prior coordination; native UI remains parent-owned.

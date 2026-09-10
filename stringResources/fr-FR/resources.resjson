@@ -56,6 +56,7 @@
   "bind": "Liez une Ressource stable, une Periode, la Quantite allouee et la Capacite disponible. Utilisez uniquement les mesures facultatives indiquees.",
   "shape": "Longueurs de categories/mesures incoherentes ou format de plus de 512 caracteres. Aucune analyse ; verifiez le modele ou actualisez.",
   "keys": "Ressource et Periode doivent etre des cles finies non vides de 512 caracteres maximum. Utilisez une date valide, pas une hierarchie.",
+  "KeyDiagnostic": "Diagnostic d'entree : visuel {0} ; ligne {1} ; role {2} ; type {3} ; attendu {4}.",
   "order": "Ordre de periode absent, non fini, incoherent ou partage par plusieurs libelles. Fournissez un ordre unique par libelle.",
   "UnitRequired": "Definissez Contrat d'analyse > Unite compatible (heures ou ETP). Les deux mesures doivent avoir la meme unite.",
   "Empty": "Aucune donnee ressource-periode dans ce contexte.",

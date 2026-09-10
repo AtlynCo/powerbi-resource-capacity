@@ -4,9 +4,17 @@ import { Axis, buildModel, CapacityModel, InputRow, LIMITS } from "./model";
 
 type Identity = powerbi.visuals.ISelectionId;
 type Host = powerbi.extensibility.visual.IVisualHost;
+type KeyValueType = "undefined" | "null" | "string" | "number" | "boolean" | "bigint" | "symbol" | "function" | "object" | "Date" | "InvalidDate";
+export interface KeyDiagnostic {
+  row: number;
+  role: "resource" | "period";
+  actualType: KeyValueType;
+  expectedType: "Date" | "string-or-finite-number-or-Date";
+}
 export interface DataResult {
   model: CapacityModel<Identity>;
   error?: "bind" | "shape" | "keys" | "order";
+  keyDiagnostic?: KeyDiagnostic;
   segmented: boolean;
   reduced: boolean;
   hasHighlights: boolean;
@@ -28,6 +36,12 @@ function localDate(value: powerbi.PrimitiveValue | undefined): Date | undefined 
     throw error;
   }
   return new Date(time);
+}
+
+function keyValueType(value: powerbi.PrimitiveValue | undefined): KeyValueType {
+  if (value === null) return "null";
+  const date = localDate(value);
+  return date ? Number.isFinite(date.getTime()) ? "Date" : "InvalidDate" : typeof value;
 }
 
 export function formatter(source: powerbi.DataViewMetadataColumn, locale: string): (value: powerbi.PrimitiveValue | undefined) => string {
@@ -81,7 +95,17 @@ export function readData(view: powerbi.DataView | undefined, host: Host): DataRe
     const r = axis(resource.values[i], "");
     const p = axis(period.values[i], "");
     const periodDate = localDate(period.values[i]);
-    if (!r || !p || (period.source.type?.dateTime && !periodDate)) return { ...empty, error: "keys" };
+    if (!r || !p || (period.source.type?.dateTime && !periodDate)) {
+      const role = !r ? "resource" : "period";
+      return {
+        ...empty, error: "keys",
+        keyDiagnostic: {
+          row: i + 1, role,
+          actualType: keyValueType(role === "resource" ? resource.values[i] : period.values[i]),
+          expectedType: role === "period" && period.source.type?.dateTime ? "Date" : "string-or-finite-number-or-Date"
+        }
+      };
+    }
     r.label = fr(resource.values[i]); p.label = fp(period.values[i]);
     if (order && !periodDate) {
       const value = order.values[i];

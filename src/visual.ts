@@ -5,6 +5,7 @@ import { legendStates, markers, summarize } from "./presentation";
 import { DataResult, readData } from "./data";
 import { clampSetting, Settings } from "./settings";
 import strings from "./strings.json";
+import visualConfig from "../pbiviz.json";
 import "../style/visual.less";
 
 type Identity = powerbi.visuals.ISelectionId;
@@ -215,7 +216,12 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
     this.active = undefined;
     this.moreButton.hidden = !data.segmented || data.model.bounded || !!data.error;
     this.updateControls();
-    const error = data.error ? this.t(data.error) : !unit || unit.length > 80 ? this.t("UnitRequired") : "";
+    let error = data.error ? this.t(data.error) : !unit || unit.length > 80 ? this.t("UnitRequired") : "";
+    if (data.error === "keys" && data.keyDiagnostic) {
+      const diagnostic = data.keyDiagnostic;
+      error += ` ${this.t("KeyDiagnostic", visualConfig.visual.version, diagnostic.row,
+        this.t(diagnostic.role === "resource" ? "Resource" : "RolePeriod"), diagnostic.actualType, diagnostic.expectedType)}`;
+    }
     this.status.hidden = false;
     if (error) {
       this.baseNotices = error;

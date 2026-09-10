@@ -8,6 +8,23 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator('[role="grid"]')).toBeVisible();
 });
 
+test("key diagnostic shows compiled version and row/role/type only, without accepting invalid dates", async ({ page }) => {
+  const { manifest } = readPackage();
+  await page.evaluate(() => {
+    const view = window.capacityTest.makeView({ rows: 1, columns: 2 });
+    view.categorical.categories[0].values = ["PRIVATE_RESOURCE", "PRIVATE_RESOURCE"];
+    view.categorical.categories[1].source.type = { dateTime: true };
+    view.categorical.categories[1].values = [new Date(2026, 7, 3), "PRIVATE_DATE_VALUE"];
+    window.capacityTest.updateView(view);
+  });
+  await expect(page.locator(".status")).toContainText(`Input diagnostic: visual ${manifest.visual.version}; row 2; role Period; type string; expected Date.`);
+  await expect(page.locator(".atlyn-capacity")).not.toContainText("PRIVATE_");
+  await expect(page.locator(".cell")).toHaveCount(0);
+  await page.evaluate(() => window.capacityTest.resize(80, 80));
+  await expect(page.locator(".tiny-summary")).toBeVisible();
+  await expect(page.locator(".tiny-summary")).toHaveAttribute("aria-label", /row 2; role Period; type string; expected Date/);
+});
+
 for (const [sample, rowCount, periodCount] of [["people-hours-by-week", 12, 4], ["machine-hours-by-day", 15, 5]]) {
   test(`cross-realm Dates render the exact ${sample} sample and retain host selections`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width: 1366, height: 768 });
