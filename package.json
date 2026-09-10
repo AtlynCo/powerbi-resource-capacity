@@ -1,6 +1,6 @@
 {
   "name": "atlyn-resource-capacity",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "description": "Bounded read-only capacity exception analysis for Power BI",
   "license": "UNLICENSED",

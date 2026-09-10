@@ -53,6 +53,34 @@ The flag is retained and shown even with nonzero allocation or capacity. For exa
 
 Conflicting order is a global analysis error, not merely a warning attached to one cell. For example, `Week A → 1` and `Week B → 1`, or two values of order for `Week A`, cannot define an unambiguous sequence. Keep date and label representations consistent; do not mix types within a period field.
 
+### Native serialized Date values
+
+For a Period column explicitly declared `dateTime` by the host, the adapter
+accepts genuine Date objects (including other JavaScript realms) and strictly
+validated ISO strings. This accommodates native serialization without changing
+the model's Date column, its values or selection identities. Text-typed periods
+are never parsed as dates.
+
+Supported strings have a four-digit year and either `YYYY-MM-DD` or
+`YYYY-MM-DDTHH:mm:ss`, optionally with fractional seconds and `Z` or an explicit
+`+HH:mm`/`-HH:mm` offset. Calendar days, leap years, clock fields and offsets are
+validated, not rolled into another period. Offsets cannot exceed 14:00.
+Fractions may contain up to seven digits but must be exactly representable in
+milliseconds: nonzero digits beyond the third are rejected, not rounded.
+
+`Z` and offset forms preserve the supplied instant and use the same SDK
+formatting as a Date with that timestamp. Date-only and zone-free datetime forms
+retain local calendar fields, matching ordinary host Date construction; local
+DST gaps that would roll the clock/date are rejected. Use a zone-qualified form
+when an exact instant is required. No workday or availability assumptions follow
+from this date normalization.
+
+Locale-dependent dates, epoch strings/numbers, whitespace, missing fields and
+unrecognized formats remain invalid. A rejected serialized Date includes only
+a format enum and validity classification in its bounded diagnostic, not the
+input value. Original host values/identities and raw successful ISO labels stay
+intact; normalized timestamps drive ordering and duplicate detection.
+
 ## Bounded host data
 
 All bounds apply at the same time:

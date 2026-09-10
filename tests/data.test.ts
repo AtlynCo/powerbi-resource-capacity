@@ -134,7 +134,10 @@ describe("native resource-period values", () => {
     const result = readData(view, makeHost().host);
     expect(result.error).toBe("keys");
     expect(result.model.cells.size).toBe(0);
-    expect(result.keyDiagnostic).toEqual({ row: 2, role: "period", actualType: type, expectedType: "Date" });
+    expect(result.keyDiagnostic).toEqual({
+      row: 2, role: "period", actualType: type, expectedType: "Date",
+      ...(type === "string" ? { serializedDate: { format: "other", validity: "invalid-or-unsupported" } } : {})
+    });
     expect(JSON.stringify(result.keyDiagnostic)).not.toMatch(/PRIVATE_|123456789|2026/);
   });
 
@@ -316,8 +319,40 @@ describe("chronological and explicit period ordering", () => {
     expect(result.model.periods.map(axis => axis.label)).toEqual(["2026-01-02", "2026-02-01"]);
   });
 
-  it("rejects a non-Date value in a date-typed period role rather than parsing a label", () => {
-    expect(read({ periods: ["2026-01-02", "2026-02-01"], sources: { period: { type: { dateTime: true } } } }).error).toBe("keys");
+  it("rejects locale-dependent strings in a date-typed period role", () => {
+    expect(read({ periods: ["01/02/2026", "02/01/2026"], sources: { period: { type: { dateTime: true } } } }).error).toBe("keys");
+  });
+
+  it.each(["date", "no-zone", "Z", "offset"])("normalizes declared dateTime %s strings without mutating host identities", form => {
+    const dates = [new Date(2026, 7, 10, 0, 0), new Date(2026, 7, 3, 0, 0)];
+    const periods = form === "date" ? ["2026-08-10", "2026-08-03"] :
+      form === "no-zone" ? ["2026-08-10T00:00:00", "2026-08-03T00:00:00"] :
+      dates.map(date => form === "Z" ? date.toISOString() : date.toISOString().replace("Z", "+00:00"));
+    const view = makeView({
+      periods, periodOrder: [null, null], sources: { period: { type: { dateTime: true }, format: "yyyy-MM-dd" } }
+    });
+    const host = makeHost(), original = view.categorical.categories[1].values, result = readData(view, host.host);
+    expect(result.error).toBeUndefined();
+    expect(result.model.periods.map(item => item.key)).toEqual([`date:${dates[1]!.getTime()}`, `date:${dates[0]!.getTime()}`]);
+    expect(result.model.periods.map(item => item.label)).toEqual(["2026-08-03", "2026-08-10"]);
+    expect(result.model.periods[0]?.rawLabel).toBe(periods[1]);
+    expect(view.categorical.categories[1].values).toBe(original);
+    expect(original).toEqual(periods);
+    expect(host.builders[0]?.withCategory).toHaveBeenNthCalledWith(2, view.categorical.categories[1], 0);
+  });
+
+  it("never infers dates from text periods and rejects duplicates across Date/ISO representations", () => {
+    const periods = ["2026-08-10", "2026-08-03"];
+    const text = read({ periods });
+    expect(text.model.periods.map(item => item.key)).toEqual(periods.map(value => `string:${value}`));
+    const date = new Date(2026, 7, 3);
+    const duplicate = read({
+      periods: [foreignDate(date.getTime()), date.toISOString()],
+      sources: { period: { type: { dateTime: true } } }
+    });
+    expect(duplicate.error).toBeUndefined();
+    expect(duplicate.model.duplicateCount).toBe(1);
+    expect([...duplicate.model.cells.values()][0]).toMatchObject({ state: "duplicate", capacity: null, identity: undefined });
   });
 
   it("keeps unordered labels and resources in stable first-seen order", () => {

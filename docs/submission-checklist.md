@@ -1,6 +1,6 @@
 # Quality and submission checklist
 
-**Native retry: 1.0.2.0; sealed quality baseline: 1.0.1.0. Certification-oriented, not Microsoft certified.** The retry corrects a reproduced cross-realm Date defect, not a licensing issue. Its targeted evidence is [separate from the historical full-quality run](quality-evidence.md#native-date-key-correction-1020). Local engineering evidence is distinct from native-host acceptance, commercial/legal approval and Partner Center submission. No shared Desktop/service UI or live submission is operated by this repository's agent.
+**Native retry: 1.0.4.0; sealed quality baseline: 1.0.1.0. Certification-oriented, not Microsoft certified.** The retry addresses host serialization of declared Date periods, not licensing. Its targeted evidence is [separate from the historical full-quality run](quality-evidence.md#native-serialized-date-correction-1040); parent native acceptance is still required. Local engineering evidence is distinct from native-host acceptance, commercial/legal approval and Partner Center submission. No shared Desktop/service UI or live submission is operated by this repository's agent.
 
 ## Historical 1.0.1.0 engineering evidence
 

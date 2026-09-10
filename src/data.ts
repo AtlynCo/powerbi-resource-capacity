@@ -1,6 +1,7 @@
 import powerbi from "powerbi-visuals-api";
 import { valueFormatter } from "powerbi-visuals-utils-formattingutils";
 import { Axis, buildModel, CapacityModel, InputRow, LIMITS } from "./model";
+import { parseSerializedDate, SerializedDate } from "./serializedDate";
 
 type Identity = powerbi.visuals.ISelectionId;
 type Host = powerbi.extensibility.visual.IVisualHost;
@@ -10,6 +11,7 @@ export interface KeyDiagnostic {
   role: "resource" | "period";
   actualType: KeyValueType;
   expectedType: "Date" | "string-or-finite-number-or-Date";
+  serializedDate?: Pick<SerializedDate, "format" | "validity">;
 }
 export interface DataResult {
   model: CapacityModel<Identity>;
@@ -93,8 +95,11 @@ export function readData(view: powerbi.DataView | undefined, host: Host): DataRe
   const hasHighlights = allocated.highlights !== undefined || capacity.highlights !== undefined;
   for (let i = 0; i < Math.min(count, LIMITS.rows); i++) {
     const r = axis(resource.values[i], "");
-    const p = axis(period.values[i], "");
-    const periodDate = localDate(period.values[i]);
+    const periodValue = period.values[i];
+    const serialized = period.source.type?.dateTime && typeof periodValue === "string" ? parseSerializedDate(periodValue) : undefined;
+    const periodDate = localDate(periodValue) ?? serialized?.date;
+    const p = axis(periodDate ?? periodValue, "");
+    if (p && typeof periodValue === "string" && serialized?.date) p.rawLabel = periodValue;
     if (!r || !p || (period.source.type?.dateTime && !periodDate)) {
       const role = !r ? "resource" : "period";
       return {
@@ -102,11 +107,12 @@ export function readData(view: powerbi.DataView | undefined, host: Host): DataRe
         keyDiagnostic: {
           row: i + 1, role,
           actualType: keyValueType(role === "resource" ? resource.values[i] : period.values[i]),
-          expectedType: role === "period" && period.source.type?.dateTime ? "Date" : "string-or-finite-number-or-Date"
+          expectedType: role === "period" && period.source.type?.dateTime ? "Date" : "string-or-finite-number-or-Date",
+          ...(role === "period" && serialized ? { serializedDate: { format: serialized.format, validity: serialized.validity } } : {})
         }
       };
     }
-    r.label = fr(resource.values[i]); p.label = fp(period.values[i]);
+    r.label = fr(resource.values[i]); p.label = fp(periodDate ?? periodValue);
     if (order && !periodDate) {
       const value = order.values[i];
       if (typeof value !== "number" || !Number.isFinite(value)) return { ...empty, error: "order" };

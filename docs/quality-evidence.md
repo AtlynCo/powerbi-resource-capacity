@@ -181,3 +181,31 @@ cause. `null`/`undefined`, `string`/`number`, `InvalidDate`, or `object` should
 guide a focused investigation, not a broad fallback or silent row skipping.
 No claim that the native bug is fixed is made. The reviewed remote PR head must
 not be advanced without prior coordination; native UI remains parent-owned.
+
+## Native serialized Date correction (1.0.4.0)
+
+The parent's decisive 1.0.3.0 native observation was `row 1; role Period; type
+string; expected Date`. That establishes the executed diagnostic runtime and
+rules out simply attributing this observation to a cached 1.0.1.0 renderer.
+The model and direct PBIR Period projection remain unchanged. The exact string
+value/format was not collected.
+
+Version 1.0.4.0 normalizes strictly validated ISO strings only when Period host
+metadata declares `dateTime`. It retains genuine/cross-realm Date support,
+source formatting, raw ISO labels and original host category values/identities.
+See the [precise supported forms and timezone/precision semantics](data-contract.md#native-serialized-date-values).
+Unsupported strings still fail; their diagnostic adds only format/validity enums.
+No locale parsing, epoch coercion, row skipping or model rewrite is introduced.
+
+The old compiled 1.0.3.0 package reproduced the parent's exact row-1/string
+diagnostic for the sanitized People sample serialized as ISO datetime-Z.
+New regressions cover both samples in four ISO forms, UTC and America/New_York,
+original string selection identities, invalid calendars/offsets/submillisecond
+precision, local DST gaps and Date/ISO duplicate-capacity safety.
+These are actual-package local mocks, not a claim of native resolution.
+
+The new review branch starts from actual main `21e26fe243ad`; diagnostic commit
+`3957f440` is preserved on its original branch and cherry-picked onto the new
+branch. The distinct `dist\capacity-native-retry-20260910-4` manifest identifies
+the exact package, source, sample and local evidence for parent native retry.
+Earlier 1.0.1.0, 1.0.2.0 and 1.0.3.0 sealed folders remain unchanged.

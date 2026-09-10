@@ -1,6 +1,6 @@
 # Submission requirements and internal comparison
 
-Public sources checked **2026-09-09**. This is research, not certification, legal approval, native-host evidence or a competitive benchmark. The researched baseline is version **1.0.1.0**, npm **1.0.1**; the later native Date correction uses **1.0.2.0** / **1.0.2**, with unchanged GUID. See [retry evidence](quality-evidence.md#native-date-key-correction-1020).
+Public sources checked **2026-09-09**. This is research, not certification, legal approval, native-host evidence or a competitive benchmark. The researched baseline is version **1.0.1.0**, npm **1.0.1**; the current native Date correction uses **1.0.4.0** / **1.0.4**, with unchanged GUID. See [retry evidence](quality-evidence.md#native-serialized-date-correction-1040).
 
 Microsoft's certification request and badge guidance was rechecked **2026-09-10** for the owner's clarification below; this does not constitute a submission or approval.
 

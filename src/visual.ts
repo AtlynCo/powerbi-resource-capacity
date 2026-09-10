@@ -221,6 +221,9 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
       const diagnostic = data.keyDiagnostic;
       error += ` ${this.t("KeyDiagnostic", visualConfig.visual.version, diagnostic.row,
         this.t(diagnostic.role === "resource" ? "Resource" : "RolePeriod"), diagnostic.actualType, diagnostic.expectedType)}`;
+      if (diagnostic.serializedDate) {
+        error += ` ${this.t("SerializedDateDiagnostic", diagnostic.serializedDate.format, diagnostic.serializedDate.validity)}`;
+      }
     }
     this.status.hidden = false;
     if (error) {
