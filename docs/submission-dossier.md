@@ -61,9 +61,18 @@ repository is not silently assumed.
 
 The original icon is supplied at 20x20 (`icon.png`) and 300x300 (`icon-300.png`). Three unaltered 1366x768 package captures are generated under `screenshots\listing`: people-hours overview, people cell details, and machine-hours overview. Each has exact bytes/hash and a provenance statement in `capture.json`.
 
-**An additional Power BI badge is explicitly required by the owner.** The parent
-will supply the approved asset and placement. This remains an asset gate; do not
-invent a badge, imply Microsoft certification or edit frozen assets to add it.
+**The owner requests Microsoft's official "Power BI certified" badge.** This
+means selecting **Request Power BI certification** in Partner Center's Product
+setup during the parent-authorized submission, followed by Microsoft's review
+and grant. It is not the IAP "additional purchase" label. No badge asset or
+placement is pending from the parent; do not add an in-visual badge, claim
+certification before Microsoft grants it, or change runtime/frozen assets.
+See [Microsoft's certification request and badge guidance](https://learn.microsoft.com/en-us/power-bi/developer/visuals/power-bi-custom-visuals-certified#submit-a-power-bi-visual-for-certification).
+
+**Recorded status:** preparation only; no certification request receipt or
+Microsoft grant is recorded. Submission remains behind the parent's final gate,
+and native results are still forthcoming. Selecting the checkbox does not
+establish certification or native-host acceptance.
 
 These are **actual final-package renders with sanitized data in a local mock-host browser**, not fabricated drawings or Desktop screenshots. Parent/owner must approve their listing suitability; replace them with authentic native-host captures if submission review requires native report context. The other five-size engineering captures are not all listing-size assets.
 
@@ -83,7 +92,7 @@ Read [current Microsoft requirements and comparison](submission-research.md), [l
 | Sample/report/export | Bound offline PBIP and exact embedded package | Refresh/save/reopen, genuine PBIX, service and export observations |
 | Source/review | Private quality PR and immutable source archive | Review/merge decision, final certification branch and reviewer permissions |
 | Commercial/legal | Approved storefront subscriptions, ungated runtime and free shared viewing; first-party terms preserved | Existing checkout/distribution terms, EULA/privacy/support/publisher/artwork/dependency review; no runtime licensing work |
-| Publication | Listing copy/assets and evidence dossier | Parent-provided additional Power BI badge/final assets and final gate; parent performs Partner Center validation/submission |
+| Publication | Listing copy/assets and evidence dossier | Final assets and parent gate; parent requests Power BI certification through Partner Center, records submission and Microsoft's review decision; no badge asset/placement task |
 
 The acquisition/runtime approval above is an actual owner decision, not a claim
 of broader legal or publication approval. No service test, export coverage or

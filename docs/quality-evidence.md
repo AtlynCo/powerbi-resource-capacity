@@ -107,5 +107,14 @@ acquisition, with ungated visuals and free shared viewing. The current offline
 renderer is intended; there is no pending licensing integration or paid-author
 enforcement to implement. Do not add keys, signers, AAD, entitlement APIs,
 feature gates, WebAccess or runtime licensing requests. The package/version and
-all frozen evidence stay unchanged. Parent owns the required additional Power BI
-badge/final assets, native PBIX and final publication gates.
+all frozen evidence stay unchanged. Parent owns native PBIX/host acceptance,
+final assets and final publication gates.
+
+The owner's badge clarification on 2026-09-10 refers to Microsoft's official
+**Power BI certified** badge, requested through Partner Center's **Request Power
+BI certification** checkbox. It is not the IAP "additional purchase" label, and
+there is no parent-supplied badge asset or placement task. No certification
+request receipt or Microsoft grant is recorded here; native results are still
+forthcoming. Do not add an in-visual badge or claim certification before
+Microsoft grants it. This documentation correction changes no runtime or
+historical evidence.
