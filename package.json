@@ -20,7 +20,8 @@
     "benchmark": "node scripts/benchmark.mjs",
     "sample:bind": "node scripts/bind-samples.mjs",
     "release:freeze": "node scripts/freeze-release.mjs",
-    "validate:local": "pwsh -NoProfile -File scripts/validate-local.ps1"
+    "validate:local": "pwsh -NoProfile -File scripts/validate-local.ps1",
+    "postinstall": "node scripts/patch-loader.mjs"
   },
   "dependencies": {
     "powerbi-visuals-utils-formattingmodel": "7.1.0",
