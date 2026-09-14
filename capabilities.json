@@ -10,8 +10,8 @@
   ],
   "dataViewMappings": [{
     "conditions": [{
-      "resource": { "min": 1, "max": 1 }, "period": { "min": 1, "max": 1 },
-      "allocated": { "min": 1, "max": 1 }, "capacity": { "min": 1, "max": 1 },
+      "resource": { "max": 1 }, "period": { "max": 1 },
+      "allocated": { "max": 1 }, "capacity": { "max": 1 },
       "periodOrder": { "max": 1 }, "nonworking": { "max": 1 }, "tooltips": { "max": 5 }
     }],
     "categorical": {

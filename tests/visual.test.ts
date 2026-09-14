@@ -112,6 +112,25 @@ describe("native host lifecycle", () => {
     visual.update({ dataViews: [], type: 2, viewport: { width: 400, height: 300 } });
     expect(root.querySelector(".status")?.textContent).toContain("Bind one stable Resource");
   });
+  it("displays empty state onboarding when mandatory roles are missing or incomplete", () => {
+    const { root, visual } = setup();
+    const incompleteView = {
+      metadata: { columns: [] },
+      categorical: {
+        categories: [{
+          source: { displayName: "Resource", roles: { resource: true } },
+          values: ["Ada"]
+        }],
+        values: []
+      }
+    };
+    visual.update(makeUpdate(incompleteView as unknown as powerbi.DataView));
+    expect(root.querySelector(".status")?.textContent).toContain("Bind one stable Resource");
+    expect(root.querySelector(".onboarding")).not.toBeNull();
+    expect(root.querySelector(".cell")).toBeNull();
+    expect(root.querySelector<HTMLButtonElement>(".next-exception")?.disabled).toBe(true);
+    expect(root.querySelector<HTMLButtonElement>(".details-button")?.disabled).toBe(true);
+  });
   it("releases matrix DOM and ignores late selection callbacks after destruction", () => {
     const { root, visual, emitSelection, view } = setup();
     const scroller = root.querySelector(".scroller");
