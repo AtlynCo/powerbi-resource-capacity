@@ -114,22 +114,50 @@ describe("native host lifecycle", () => {
   });
   it("displays empty state onboarding when mandatory roles are missing or incomplete", () => {
     const { root, visual } = setup();
-    const incompleteView = {
-      metadata: { columns: [] },
-      categorical: {
-        categories: [{
-          source: { displayName: "Resource", roles: { resource: true } },
-          values: ["Ada"]
-        }],
+    const partialRoleConfigs = [
+      // Only resource
+      {
+        categories: [{ source: { displayName: "Resource", roles: { resource: true } }, values: ["Ada"] }],
         values: []
+      },
+      // Resource + Period, missing allocated and capacity
+      {
+        categories: [
+          { source: { displayName: "Resource", roles: { resource: true } }, values: ["Ada"] },
+          { source: { displayName: "Period", roles: { period: true } }, values: ["Week 1"] }
+        ],
+        values: []
+      },
+      // Resource + Period + Allocated, missing capacity
+      {
+        categories: [
+          { source: { displayName: "Resource", roles: { resource: true } }, values: ["Ada"] },
+          { source: { displayName: "Period", roles: { period: true } }, values: ["Week 1"] }
+        ],
+        values: [
+          { source: { displayName: "Allocated", roles: { allocated: true } }, values: [40] }
+        ]
+      },
+      // Missing resource category
+      {
+        categories: [
+          { source: { displayName: "Period", roles: { period: true } }, values: ["Week 1"] }
+        ],
+        values: [
+          { source: { displayName: "Allocated", roles: { allocated: true } }, values: [40] },
+          { source: { displayName: "Capacity", roles: { capacity: true } }, values: [40] }
+        ]
       }
-    };
-    visual.update(makeUpdate(incompleteView as unknown as powerbi.DataView));
-    expect(root.querySelector(".status")?.textContent).toContain("Bind one stable Resource");
-    expect(root.querySelector(".onboarding")).not.toBeNull();
-    expect(root.querySelector(".cell")).toBeNull();
-    expect(root.querySelector<HTMLButtonElement>(".next-exception")?.disabled).toBe(true);
-    expect(root.querySelector<HTMLButtonElement>(".details-button")?.disabled).toBe(true);
+    ];
+
+    for (const categorical of partialRoleConfigs) {
+      visual.update(makeUpdate({ metadata: { columns: [] }, categorical } as unknown as powerbi.DataView));
+      expect(root.querySelector(".status")?.textContent).toContain("Bind one stable Resource");
+      expect(root.querySelector(".onboarding")).not.toBeNull();
+      expect(root.querySelector(".cell")).toBeNull();
+      expect(root.querySelector<HTMLButtonElement>(".next-exception")?.disabled).toBe(true);
+      expect(root.querySelector<HTMLButtonElement>(".details-button")?.disabled).toBe(true);
+    }
   });
   it("releases matrix DOM and ignores late selection callbacks after destruction", () => {
     const { root, visual, emitSelection, view } = setup();
