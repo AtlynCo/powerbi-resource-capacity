@@ -1,0 +1,197 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "InstructionsText",
+  "position": {
+    "x": 32,
+    "y": 32,
+    "width": 1216,
+    "height": 656,
+    "z": 0,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "textbox",
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Instructions'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Atlyn Resource Capacity — Sample Report Instructions & Usage Hints",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "16pt",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "PURPOSE & SCOPE: Atlyn Resource Capacity is a bounded, read-only matrix visual for comparing allocated workload against available capacity across resources and discrete time periods. It surfaces capacity exceptions (overloads, spare capacity, fully allocated), planned shutdowns/nonworking assertions, and missing data without pretending to be an automated scheduler or writeback engine.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "FIELD ROLES & BINDINGS:\n• Resource (Grouping): Stable identifier or display name (e.g., People[Resource] or Machines[Resource]).\n• Period (Grouping): Model Date column (e.g., People[Period] or Machines[Period]). Do not bind an automatic date hierarchy.\n• Allocated amount (Measure): Workload or demand measure (e.g., [Allocated hours] or [Machine allocated hours]).\n• Available capacity (Measure): Capacity or availability target (e.g., [Available hours] or [Machine available hours]).\n• Period order (Measure, optional): Unique integer ordering when non-standard chronological sorting is needed.\n• Nonworking (Measure, optional): 0 or 1 flag asserting nonworking status (e.g., plant maintenance, holidays).\n• Tooltip measures: Supplementary measures displayed in native tooltips (e.g., assignment count, source rows).",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "ANALYSIS CONTRACT & FORMAT SETTINGS:\n• Compatible unit: Required text setting under Format visual > Analysis contract > Compatible unit (e.g., 'hours' or 'FTE'). Both measures must use this same unit; no unit conversions are made.\n• Measures additive across periods: Toggle under Analysis contract. Leave OFF unless both allocated and capacity amounts are mathematically additive across non-overlapping periods. FTE, rates, and snapshots must keep totals off.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "VISUAL STATE INDICATORS:\n• [+] Spare capacity: Allocated < Capacity (under-utilized period).\n• [=] Fully allocated: Allocated == Capacity (at target limit).\n• [!] Overallocated: Allocated > Capacity, or positive allocation with zero capacity (overload exception).\n• [N] Nonworking: Explicit model assertion of nonworking period (e.g., maintenance or holiday).\n• [/] Unavailable: Both allocated and capacity are 0 (0 / 0).\n• [?] Missing amount: Capacity or allocation is blank / not delivered.\n• [X] Invalid input: Amount is non-numeric, negative, or invalid.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "INTERACTIONS & KEYBOARD NAVIGATION:\n• Selection: Click a cell to select and cross-filter related report visuals. Click visual background or 'Clear' button to clear selection.\n• Keyboard: Arrow keys navigate cells; Home/End jump to row start/end; Enter/Space selects; Alt+ArrowDown moves to the next overload.\n• Context Menu: Right-click or Shift+F10 anywhere on cells or empty visual space to open the native Power BI context menu.\n• Cell Details: Focus a cell and click 'i' to view unformatted model numbers, or '?' for the in-visual guide.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "SAMPLE PAGES:\n• People · capacity grid: Weekly hours for 3 personnel. Features normal utilization, an overload (P01 Week 2), planned shutdown (P01 Week 3), and intentionally missing capacity (P03 Week 4). Compare with native table on page 2.\n• Machines · capacity grid: Daily hours for 3 machines with additive row totals enabled. Features planned maintenance (M01 Day 2) and overload during maintenance (M01 Day 3). Compare with native table on page 4.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

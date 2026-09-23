@@ -85,7 +85,7 @@ export function validateSource(root = sourceRoot, capabilities = json("capabilit
   assert.ok(!report.publicCustomVisuals?.length && !report.organizationCustomVisuals?.length,
     "Sample must use a private embedded visual, not a store download");
   const pages = json(join(definitions, "pages", "pages.json"));
-  assert.deepEqual(pages.pageOrder, ["PeopleCapacity", "PeopleWeekly", "MachinesCapacity", "MachinesDaily"]);
+  assert.deepEqual(pages.pageOrder, ["PeopleCapacity", "PeopleWeekly", "MachinesCapacity", "MachinesDaily", "Instructions"]);
   assert.equal(pages.activePageName, "PeopleCapacity");
   const tables = new Map(), globalMeasures = new Set(), data = [];
   for (const scenario of scenarios) {

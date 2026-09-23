@@ -50,7 +50,7 @@ Do not add “certified”, “best”, “market-leading”, automatic scheduli
 | Runtime | Local bundled rendering; no external requests, telemetry, assets, backend, auth or payment service |
 | Acquisition / runtime access | Existing Atlyn storefront subscriptions; ungated runtime and free shared viewing |
 | Source license status | No tracked first-party LICENSE/COPYING; package declares `UNLICENSED`; no relicensing |
-| Support metadata | `https://www.atlynco.com/docs/faq`; `atlyn.help@gmail.com`; author Atlyn |
+| Support metadata | FAQ `https://atlynco.github.io/atlyn-powerbi-support/docs/faq/`; Terms `https://atlynco.github.io/atlyn-powerbi-support/legal/terms/`; Privacy `https://atlynco.github.io/atlyn-powerbi-support/legal/privacy/`; `atlyn.help@gmail.com`; author Atlyn |
 | Repository | Private `AtlynCo/powerbi-resource-capacity` |
 | Exact source/package/assets | Retry manifest for 1.0.4.0; sealed `manifest.json` for historical 1.0.1.0. Do not mix their bytes or evidence. |
 

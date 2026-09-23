@@ -77,8 +77,33 @@ describe("native host lifecycle", () => {
     cell.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
     expect(selectionManager.select).not.toHaveBeenCalled();
     expect(selectionManager.showContextMenu).not.toHaveBeenCalled();
+    const toolbar = root.querySelector<HTMLElement>(".toolbar")!;
+    toolbar.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, clientX: 10, clientY: 10 }));
+    expect(selectionManager.showContextMenu).not.toHaveBeenCalled();
     cell.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
     expect(document.activeElement?.getAttribute("data-col")).toBe("1");
+  });
+  it("invokes native context menu on empty space above and around the visual", () => {
+    const { root, visual, selectionManager } = setup();
+    const toolbar = root.querySelector<HTMLElement>(".toolbar")!;
+    toolbar.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, clientX: 50, clientY: 20 }));
+    expect(selectionManager.showContextMenu).toHaveBeenCalledWith(expect.anything(), { x: 50, y: 20 });
+    selectionManager.showContextMenu.mockClear();
+
+    const caption = root.querySelector<HTMLElement>(".caption")!;
+    caption.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, clientX: 60, clientY: 40 }));
+    expect(selectionManager.showContextMenu).toHaveBeenCalledWith(expect.anything(), { x: 60, y: 40 });
+    selectionManager.showContextMenu.mockClear();
+
+    // Context menu in empty / onboarding state
+    visual.update({ dataViews: [], type: 2, viewport: { width: 400, height: 300 } });
+    root.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, clientX: 100, clientY: 150 }));
+    expect(selectionManager.showContextMenu).toHaveBeenCalledWith(expect.anything(), { x: 100, y: 150 });
+    selectionManager.showContextMenu.mockClear();
+
+    // Keyboard Shift+F10 on empty space / non-cell
+    root.firstElementChild!.dispatchEvent(new KeyboardEvent("keydown", { key: "F10", shiftKey: true, bubbles: true }));
+    expect(selectionManager.showContextMenu).toHaveBeenCalledTimes(1);
   });
   it("surfaces native selection rejection", async () => {
     const { root, selectionManager } = setup();

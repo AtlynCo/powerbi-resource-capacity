@@ -23,6 +23,7 @@ function element<K extends keyof HTMLElementTagNameMap>(tag: K, className = "", 
 
 export class Visual implements powerbi.extensibility.visual.IVisual {
   private readonly host: powerbi.extensibility.visual.IVisualHost;
+  private readonly container: HTMLElement;
   private readonly root = element("div", "atlyn-capacity");
   private readonly toolbar = element("div", "toolbar");
   private readonly caption = element("div", "caption");
@@ -42,6 +43,7 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
   private readonly nextButton = element("button", "next-exception");
   private readonly multiButton = element("button", "multi-select", "+");
   private readonly selection: powerbi.extensibility.ISelectionManager;
+  private readonly emptyId: Identity;
   private readonly formatService: FormattingSettingsService;
   private readonly localization: powerbi.extensibility.ILocalizationManager;
   private settings = new Settings();
@@ -75,7 +77,9 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
   constructor(options?: powerbi.extensibility.visual.VisualConstructorOptions) {
     if (!options) throw new Error("Power BI constructor options are required");
     this.host = options.host;
+    this.container = options.element;
     this.selection = this.host.createSelectionManager();
+    this.emptyId = this.host.createSelectionIdBuilder().createSelectionId();
     this.localization = this.host.createLocalizationManager();
     this.formatService = new FormattingSettingsService(this.localization);
     this.root.setAttribute("role", "region");
@@ -115,6 +119,7 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
     this.root.addEventListener("click", this.click);
     this.root.addEventListener("keydown", this.keydown);
     this.root.addEventListener("contextmenu", this.contextmenu);
+    this.container.addEventListener("contextmenu", this.contextmenu);
     this.scroller.addEventListener("mouseover", this.mouseover);
     this.scroller.addEventListener("mouseleave", this.hideTooltip);
     this.scroller.addEventListener("scroll", this.hideTooltip);
@@ -518,14 +523,21 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
   };
   private contextmenu = (event: MouseEvent): void => {
     event.preventDefault();
+    event.stopPropagation();
     const td = this.target(event);
-    if (td && !(this.touchContext && this.touchContext.key === td.dataset.key && this.touchContext.until > Date.now())) this.menu(td, event.clientX, event.clientY);
+    if (td && this.touchContext && this.touchContext.key === td.dataset.key && this.touchContext.until > Date.now()) {
+      this.touchContext = undefined;
+      return;
+    }
+    this.menu(td, event.clientX, event.clientY);
   };
-  private menu(td: HTMLTableCellElement, x: number, y: number): void {
-    const identity = this.cell(td)?.identity;
+  private menu(td: HTMLTableCellElement | undefined, x: number, y: number): void {
+    if (!this.allowInteractions) return;
+    const identity = td ? this.cell(td)?.identity : this.emptyId;
+    if (!identity) return;
     const generation = this.generation;
     try {
-      if (identity && this.allowInteractions) this.selection.showContextMenu(identity, { x, y }).then(() => undefined, () => {
+      this.selection.showContextMenu(identity, { x, y }).then(() => undefined, () => {
         if (generation === this.generation) this.interactionError();
       });
     } catch { this.interactionError(); }
@@ -538,13 +550,14 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
     }
     if (event.altKey && event.key === "ArrowDown") { event.preventDefault(); this.nextException(); return; }
     const td = this.target(event), data = this.data;
-    if (!td || !data) return;
-    if (event.key === "Enter" || event.key === " ") { event.preventDefault(); this.select(td, event.ctrlKey || event.metaKey || event.shiftKey); return; }
     if ((event.shiftKey && event.key === "F10") || event.key === "ContextMenu") {
-      event.preventDefault(); const box = td.getBoundingClientRect();
-      this.menu(td, box.left, box.top);
+      event.preventDefault();
+      const rect = td?.getBoundingClientRect() ?? (event.target instanceof Element ? event.target.getBoundingClientRect() : this.root.getBoundingClientRect());
+      this.menu(td, rect.left, rect.top);
       return;
     }
+    if (!td || !data) return;
+    if (event.key === "Enter" || event.key === " ") { event.preventDefault(); this.select(td, event.ctrlKey || event.metaKey || event.shiftKey); return; }
     let r = Number(td.dataset.row), c = Number(td.dataset.col);
     switch (event.key) {
       case "ArrowDown": r++; break;
@@ -630,6 +643,7 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
     this.root.removeEventListener("click", this.click);
     this.root.removeEventListener("keydown", this.keydown);
     this.root.removeEventListener("contextmenu", this.contextmenu);
+    this.container.removeEventListener("contextmenu", this.contextmenu);
     this.scroller.removeEventListener("mouseover", this.mouseover);
     this.scroller.removeEventListener("mouseleave", this.hideTooltip);
     this.scroller.removeEventListener("scroll", this.hideTooltip);

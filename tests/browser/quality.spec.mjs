@@ -778,6 +778,18 @@ test.describe("touch input (mock host services, real Edge pointer dispatch)", ()
     expect(await mockCalls(page, "context")).toBe(0);
   });
 
+  test("empty space above and around the visual opens host context menu", async ({ page }) => {
+    await page.evaluate(() => window.capacityTest.render({ rows: 2, columns: 4 }, 398, 298));
+    await page.locator(".toolbar").click({ button: "right" });
+    expect(await mockCalls(page, "context")).toBe(1);
+    await page.locator(".caption").click({ button: "right" });
+    expect(await mockCalls(page, "context")).toBe(2);
+    // Onboarding / empty state context menu
+    await page.evaluate(() => window.capacityTest.updateView({ metadata: { columns: [] }, categorical: {} }));
+    await page.locator(".atlyn-capacity").click({ button: "right" });
+    expect(await mockCalls(page, "context")).toBe(3);
+  });
+
   test("longpress invokes one context menu and suppresses its compatibility click", async ({ page, context }) => {
     await page.evaluate(() => window.capacityTest.render({ rows: 2, columns: 4 }, 398, 298));
     const box = await cellAt(page, 0, 0).boundingBox();

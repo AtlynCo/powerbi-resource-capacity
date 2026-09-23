@@ -63,13 +63,13 @@ beforeAll(async () => {
 afterAll(() => rmSync(scratch, { recursive: true, force: true }));
 
 describe("fully bound offline PBIP sample", () => {
-  it("resolves all seven roles, hours formatting, four pages and the literal offline model", () => {
+  it("resolves all seven roles, hours formatting, report pages and the literal offline model", () => {
     const checked = binding.validateSource();
     expect(checked.data).toMatchObject([
       { table: "People", rows: 12, periods: 4 },
       { table: "Machines", rows: 15, periods: 5 }
     ]);
-    expect(checked.documents).toHaveLength(14);
+    expect(checked.documents).toHaveLength(16);
   });
 
   it("rejects a period hierarchy in place of the sample's direct Period column", () => {
