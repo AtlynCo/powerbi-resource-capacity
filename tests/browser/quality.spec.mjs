@@ -790,6 +790,55 @@ test.describe("touch input (mock host services, real Edge pointer dispatch)", ()
     expect(await mockCalls(page, "context")).toBe(3);
   });
 
+  test("real pointer right-click in reviewer blank zones and short-content whitespace opens context menu", async ({ page }) => {
+    // Reviewer screenshot geometry: 3 rows x 5 periods in an oversized 1216x640 viewport
+    await page.evaluate(() => window.capacityTest.render({ rows: 3, columns: 5 }, 1216, 640));
+    const rootBox = await page.locator(".atlyn-capacity").boundingBox();
+    expect(rootBox).not.toBeNull();
+    expect([rootBox.width, rootBox.height]).toEqual([1216, 640]);
+
+    const scrollerBox = await page.locator(".scroller").boundingBox();
+    const tableBox = await page.locator("table").boundingBox();
+    expect(scrollerBox).not.toBeNull();
+    expect(tableBox).not.toBeNull();
+    expect(tableBox.height).toBeLessThan(scrollerBox.height - 150);
+
+    const toolbarBox = await page.locator(".toolbar").boundingBox();
+    await page.mouse.click(toolbarBox.x + 100, toolbarBox.y + toolbarBox.height / 2, { button: "right" });
+    expect(await mockCalls(page, "context")).toBe(1);
+    expect(await page.evaluate(() => window.capacityTest.events.contexts.at(-1))).toMatchObject({ key: "", point: { x: toolbarBox.x + 100, y: toolbarBox.y + toolbarBox.height / 2 } });
+
+    const legendBox = await page.locator(".legend").boundingBox();
+    await page.mouse.click(legendBox.x + 150, legendBox.y + legendBox.height / 2, { button: "right" });
+    expect(await mockCalls(page, "context")).toBe(2);
+    expect(await page.evaluate(() => window.capacityTest.events.contexts.at(-1).key)).toBe("");
+
+    const resourceHeader = page.locator("th.resource").first();
+    const resourceBox = await resourceHeader.boundingBox();
+    await page.mouse.click(resourceBox.x + resourceBox.width / 2, resourceBox.y + resourceBox.height / 2, { button: "right" });
+    expect(await mockCalls(page, "context")).toBe(3);
+    expect(await page.evaluate(() => window.capacityTest.events.contexts.at(-1).key)).toBe("");
+
+    const cell = cellAt(page, 0, 1);
+    const cellBox = await cell.boundingBox();
+    const cellCenter = { x: Math.round(cellBox.x + cellBox.width / 2), y: Math.round(cellBox.y + cellBox.height / 2) };
+    await page.mouse.click(cellCenter.x, cellCenter.y, { button: "right" });
+    expect(await mockCalls(page, "context")).toBe(4);
+    expect(await page.evaluate(() => window.capacityTest.events.contexts.at(-1))).toEqual({ key: "Resource 001|Week 02", point: cellCenter });
+
+    const blankY = Math.round(tableBox.y + tableBox.height + 80);
+    expect(blankY).toBeLessThan(scrollerBox.y + scrollerBox.height);
+    await page.mouse.click(scrollerBox.x + 250, blankY, { button: "right" });
+    expect(await mockCalls(page, "context")).toBe(5);
+    expect(await page.evaluate(() => window.capacityTest.events.contexts.at(-1).key)).toBe("");
+
+    const rightBlankX = Math.round(tableBox.x + tableBox.width + 100);
+    expect(rightBlankX).toBeLessThan(scrollerBox.x + scrollerBox.width);
+    await page.mouse.click(rightBlankX, tableBox.y + 50, { button: "right" });
+    expect(await mockCalls(page, "context")).toBe(6);
+    expect(await page.evaluate(() => window.capacityTest.events.contexts.at(-1).key)).toBe("");
+  });
+
   test("longpress invokes one context menu and suppresses its compatibility click", async ({ page, context }) => {
     await page.evaluate(() => window.capacityTest.render({ rows: 2, columns: 4 }, 398, 298));
     const box = await cellAt(page, 0, 0).boundingBox();
