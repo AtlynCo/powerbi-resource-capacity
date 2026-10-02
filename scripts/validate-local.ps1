@@ -18,6 +18,7 @@ function Invoke-Gate([string]$Name, [string[]]$Arguments) {
 if ($LASTEXITCODE -ne 0) { throw 'Icon generation failed' }
 Invoke-Gate 'typecheck' @('run', 'typecheck')
 Invoke-Gate 'lint' @('run', 'lint')
+Invoke-Gate 'eslint' @('run', 'eslint')
 Invoke-Gate 'unit' @('test')
 # This is the final package build. Every subsequent package check uses these bytes.
 Invoke-Gate 'sdk-audit' @('run', 'audit:sdk')

@@ -7,9 +7,10 @@
   "scripts": {
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
     "lint": "eslint src tests scripts",
+    "eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "test": "vitest run",
     "build": "pwsh -NoProfile -File scripts/package.ps1",
-    "package": "npm run typecheck && npm run lint && npm test && npm run build && npm run test:browser && npm run audit:certification",
+    "package": "npm run typecheck && npm run lint && npm run eslint && npm test && npm run build && npm run test:browser && npm run audit:certification",
     "test:browser": "node scripts/browser.mjs test",
     "install:browser": "node scripts/browser.mjs install chromium",
     "audit:dependencies": "npm audit --omit=dev --audit-level=moderate",
