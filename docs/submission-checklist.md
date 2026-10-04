@@ -1,6 +1,6 @@
 # Quality and submission checklist
 
-**Native retry: 1.0.4.0; sealed quality baseline: 1.0.1.0. Certification-oriented, not Microsoft certified.** The retry addresses host serialization of declared Date periods, not licensing. Its targeted evidence is [separate from the historical full-quality run](quality-evidence.md#native-serialized-date-correction-1040); parent native acceptance is still required. Local engineering evidence is distinct from native-host acceptance, commercial/legal approval and Partner Center submission. No shared Desktop/service UI or live submission is operated by this repository's agent.
+**Current PR candidate: 1.0.6.0; prior native retry: 1.0.4.0; sealed quality baseline: 1.0.1.0. Certification-oriented, not Microsoft certified.** The 1.0.4.0 retry addresses host serialization of declared Date periods, not licensing. Its targeted evidence is [separate from the historical full-quality run](quality-evidence.md#native-serialized-date-correction-1040); parent native acceptance is still required. Current candidate evidence and blockers are recorded below. Local engineering evidence is distinct from native-host acceptance, commercial/legal approval and Partner Center submission. No shared Desktop/service UI or live submission is operated by this repository's agent.
 
 ## Historical 1.0.1.0 engineering evidence
 
@@ -23,6 +23,16 @@ The final local run recorded **225 passing unit/host/sample tests, 55 passing co
 | Exact reviewed source and runtime provenance | `source.zip`, `build-inputs.json`, frozen manifest |
 
 No GitHub workflow, CI badge, hosted check, Codespace, cloud build or Actions run is required or permitted. Git source push and a review PR are separate from local execution.
+
+## Current PR #6 candidate evidence (2026-10-04; not frozen)
+
+The local candidate was built from source commit `c7a3c38cf9f15af1d03e66387a1635cd067182f6`: visual version **1.0.6.0**, API declaration **5.11.0**, API package **5.11.1**, and Power BI tools **7.2.1**. The generated `dist\AtlynResourceCapacityC72F07AC931A4BD196369E890FA879E2.1.0.6.0.pbiviz` is 134,569 bytes with SHA-256 `8137353a89894449033fdf1fb98d0ee527ec7f18beb7ae7394516dd857aab075`. The generated PBIP at `dist\sample\AtlynResourceCapacity\AtlynResourceCapacity.pbip` embeds that exact package hash; its binding manifest records official JSON Schema validation as passed. Neither artifact is a native Desktop acceptance result or a frozen release.
+
+On this candidate, strict source/test typechecks, both ESLint commands, and **291 unit/host/sample tests** passed. `npm run audit:sdk` completed `pbiviz package --certification-audit` with no external requests found; `npm run audit:certification` passed its compiled-package inspection. The production-only dependency audit found zero vulnerabilities. The **full** lockfile audit exited 1 with six High affected-package entries from one advisory, GHSA-vfj7-8cjw-p6xm; the captured output is at `dist\local-evidence\full-dependency-audit.json`. No compatible published fix is available, and npm's suggested tools 1.7.2 downgrade is not applied. This prevents release freeze.
+
+All **77 current compiled-package browser tests passed** in headless Microsoft Edge 153.0.4234.48 with the existing Playwright channel option and mocked Power BI host services; this used isolated test contexts, not a shared interactive Edge window or Desktop. The real-package captures were generated at five tile sizes and as three 1366x768 listing candidates under `dist\screenshots`, and the 30-sample benchmark and CPU profiles are under `dist\performance`; each manifest records the package SHA-256. These are engineering/mock-host evidence, not native screenshots or acceptance. No `.pbix` exists in this worktree; the PBIP must still be opened, refreshed, saved and reopened in Desktop by the owner, who must supply any genuine PBIX and record its provenance and embedded-package parity.
+
+As of October 4, the coordinator confirmed read-only access for `OSDC1033` and `pbicvsupport` on each repository. This does not provide submission credentials or recovery codes and does not make the candidate source match the certification branch: the package's runtime source commit is `c7a3c38cf9f15af1d03e66387a1635cd067182f6`, while the remote `certification` branch remains `d3bb63714794e160c9305fb79586fba9f62be843`. Documentation-only readiness updates do not change the packaged inputs. No protected ref was advanced. Existing listing notes record the unresolved 1366x768 versus 1280x720 guidance discrepancy; current-candidate mock-host captures are available, but owner approval remains outstanding.
 
 ## Local release review
 
